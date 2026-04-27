@@ -1,25 +1,14 @@
-package com.twilightchime.blog.entity;
+package com.twilightchime.blog.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.twilightchime.blog.entity.Blog;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "t_user")
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserVo {
     private Long id;
     private String nickname;
     private String username;
@@ -34,7 +23,6 @@ public class User {
     private Date createTime;
     private Date updateTime;
     private Date lastLoginTime;
-    @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
-    private List<Blog> blogs = new ArrayList<>();
+
+    private List<BlogVo> blogs;
 }

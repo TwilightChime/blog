@@ -1,7 +1,8 @@
 package com.twilightchime.blog.controller;
 
-import com.twilightchime.blog.entity.User;
+import com.twilightchime.blog.common.Result;
 import com.twilightchime.blog.service.UserService;
+import com.twilightchime.blog.vo.UserVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
     @GetMapping("/{username}")
-    public User getUsers(@PathVariable String username) {
-        return userService.getUser(username);
+    public Result<UserVo> getUsers(@PathVariable String username) {
+        UserVo userVo = userService.getUser(username);
+        return Result.success(userVo);
     }
 }

@@ -1,7 +1,7 @@
 package com.twilightchime.blog.service;
 
-import com.twilightchime.blog.entity.User;
+import com.twilightchime.blog.vo.UserVo;
 
 public interface UserService {
-    User getUser(String username);
+    UserVo getUser(String username);
 }
