@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,5 +24,5 @@ public class Type {
     private String color;
     @OneToMany(mappedBy = "type")
     @JsonIgnoreProperties("type")
-    private List<Blog> blogs = new ArrayList<>();
+    private List<Blog> blogs;
 }

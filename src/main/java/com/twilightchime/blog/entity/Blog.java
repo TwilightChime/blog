@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,10 +38,10 @@ public class Blog {
     private Type type;
     @ManyToMany
     @JsonIgnoreProperties("blogs")
-    private List<Tag> tags = new ArrayList<>();
+    private List<Tag> tags;
     @ManyToOne
     @JsonIgnoreProperties("blogs")
     private User user;
 //    @OneToMany(fetch = FetchType.LAZY)
-//    private List<Comment> comments = new ArrayList<>();
+//    private List<Comment> comments;
 }

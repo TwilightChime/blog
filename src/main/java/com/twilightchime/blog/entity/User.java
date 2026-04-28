@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,5 +35,5 @@ public class User {
     private Date lastLoginTime;
     @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user")
-    private List<Blog> blogs = new ArrayList<>();
+    private List<Blog> blogs;
 }

@@ -17,6 +17,6 @@ public class UserController {
     @GetMapping("/{username}")
     public Result<UserVo> getUsers(@PathVariable String username) {
         UserVo userVo = userService.getUser(username);
-        return Result.success(userVo);
+        return Result.ok("获取用户信息", userVo);
     }
 }
