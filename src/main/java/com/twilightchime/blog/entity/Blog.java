@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -18,7 +18,10 @@ import java.util.List;
 @AllArgsConstructor
 public class Blog {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "default_seq")
+    @SequenceGenerator(name = "default_seq",
+            sequenceName = "hibernate_sequence",
+            allocationSize = 1)
     private Long id;
     private String title;
     private String content;
@@ -30,8 +33,8 @@ public class Blog {
     private boolean commentabled;
     private boolean published;
     private boolean recommend;
-    private Date createTime;
-    private Date updateTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
     private String description;
     @ManyToOne
     @JsonIgnoreProperties("blogs")

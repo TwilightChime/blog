@@ -6,7 +6,7 @@ import com.twilightchime.blog.entity.User;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +23,8 @@ public class BlogVo {
     private boolean commentabled;
     private boolean published;
     private boolean recommend;
-    private Date createTime;
-    private Date updateTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
     private String description;
 
     private TypeVo type;

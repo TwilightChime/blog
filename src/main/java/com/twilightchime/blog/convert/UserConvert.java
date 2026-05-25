@@ -1,22 +1,30 @@
 package com.twilightchime.blog.convert;
 
+import com.twilightchime.blog.dto.UserCreateDto;
+import com.twilightchime.blog.dto.UserInfoDto;
 import com.twilightchime.blog.entity.User;
 import com.twilightchime.blog.vo.UserVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-
 @Component
 public class UserConvert {
-    public User toEntity(UserVo vo) {
-        User entity = new User();
-        BeanUtils.copyProperties(vo, entity);
-        return entity;
+
+    public User toUser(UserCreateDto userCreateDto) {
+        User user = new User();
+        BeanUtils.copyProperties(userCreateDto, user);
+        return user;
     }
-    public UserVo toVo(User entity) {
-        UserVo vo = new UserVo();
-        BeanUtils.copyProperties(entity, vo);
-        return vo;
+
+    public UserInfoDto toUserInfoDto(User user) {
+        UserInfoDto userInfoDto = new UserInfoDto();
+        BeanUtils.copyProperties(user, userInfoDto);
+        return userInfoDto;
+    }
+
+    public UserVo toUserVo(User user) {
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user, userVo);
+        return userVo;
     }
 }

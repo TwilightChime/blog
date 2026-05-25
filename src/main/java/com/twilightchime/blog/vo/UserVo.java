@@ -4,7 +4,7 @@ import com.twilightchime.blog.entity.Blog;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,9 +20,9 @@ public class UserVo {
     private String loginLat;
     private String loginLng;
     private String type;
-    private Date createTime;
-    private Date updateTime;
-    private Date lastLoginTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+    private LocalDateTime lastLoginTime;
 
     private List<BlogVo> blogs;
 

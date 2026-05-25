@@ -17,7 +17,10 @@ import java.util.List;
 @AllArgsConstructor
 public class Type {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "default_seq")
+    @SequenceGenerator(name = "default_seq",
+            sequenceName = "hibernate_sequence",
+            allocationSize = 1)
     private Long id;
     private String name;
     private String pic_url;

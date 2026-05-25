@@ -1,5 +1,6 @@
 package com.twilightchime.blog.convert;
 
+import com.twilightchime.blog.dto.TypeCreateDto;
 import com.twilightchime.blog.entity.Type;
 import com.twilightchime.blog.vo.TypeVo;
 import org.springframework.beans.BeanUtils;
@@ -7,14 +8,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TypeConvert {
-    public Type toEntity(Type vo) {
-        Type entity = new Type();
-        BeanUtils.copyProperties(vo, entity);
-        return entity;
+    public Type toType(TypeCreateDto typeCreateDto) {
+        Type type = new Type();
+        BeanUtils.copyProperties(typeCreateDto, type);
+        return type;
     }
-    public TypeVo toVo(Type entity) {
-        TypeVo vo = new TypeVo();
-        BeanUtils.copyProperties(entity, vo);
-        return vo;
+    public TypeVo toTypeVo(Type type) {
+        TypeVo typeVo = new TypeVo();
+        BeanUtils.copyProperties(type, typeVo);
+        return typeVo;
     }
 }

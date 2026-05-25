@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -18,7 +18,10 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "default_seq")
+    @SequenceGenerator(name = "default_seq",
+            sequenceName = "hibernate_sequence",
+            allocationSize = 1)
     private Long id;
     private String nickname;
     private String username;
@@ -30,9 +33,9 @@ public class User {
     private String loginLat;
     private String loginLng;
     private String type;
-    private Date createTime;
-    private Date updateTime;
-    private Date lastLoginTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+    private LocalDateTime lastLoginTime;
     @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user")
     private List<Blog> blogs;
