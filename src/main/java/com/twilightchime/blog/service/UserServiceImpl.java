@@ -1,16 +1,23 @@
 package com.twilightchime.blog.service;
 
+import com.twilightchime.blog.common.PageRequest;
+import com.twilightchime.blog.common.PageResult;
 import com.twilightchime.blog.convert.UserConvert;
 import com.twilightchime.blog.dao.UserRepository;
 import com.twilightchime.blog.dto.UserCreateDto;
 import com.twilightchime.blog.entity.User;
 import com.twilightchime.blog.exception.BusinessException;
+import com.twilightchime.blog.vo.UserVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -68,5 +75,13 @@ public class UserServiceImpl implements UserService {
             return new BusinessException("用户id不存在");
         });
         return user;
+    }
+
+    @Override
+    public PageResult<UserVo> getUsersByPage(PageRequest pageRequest) {
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(pageRequest.getPageNumber() - 1, pageRequest.getPageSize(), pageRequest.getSort());
+        Page<User> userPage = userRepository.findAll(pageable);
+        Page<UserVo> userVoPage = userPage.map(userConvert::toUserVo);
+        return PageResult.of(userVoPage);
     }
 }

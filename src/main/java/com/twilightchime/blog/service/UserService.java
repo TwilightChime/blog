@@ -1,5 +1,7 @@
 package com.twilightchime.blog.service;
 
+import com.twilightchime.blog.common.PageRequest;
+import com.twilightchime.blog.common.PageResult;
 import com.twilightchime.blog.dto.UserCreateDto;
 import com.twilightchime.blog.entity.User;
 import com.twilightchime.blog.vo.UserVo;
@@ -12,4 +14,6 @@ public interface UserService {
     User getUser(String username);
 
     User getUser(Long id);
+
+    PageResult<UserVo> getUsersByPage(PageRequest pageRequest);
 }
