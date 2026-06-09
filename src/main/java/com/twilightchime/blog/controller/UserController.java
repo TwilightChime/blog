@@ -23,6 +23,7 @@ public class UserController {
     @PostMapping("/register")
     public Result<Map<String, Object>> createUser(@RequestBody Map<String, UserCreateDto> para) {
         UserCreateDto userCreateDto = para.get("user");
+
         User user = userService.createUser(userCreateDto);
         String token = String.valueOf(ErrorCode.UNAUTHORIZED);
         Map<String,Object> userInfo = new HashMap<>();
@@ -34,6 +35,7 @@ public class UserController {
     @PostMapping("/login")
     public Result<Map<String, Object>> login(@RequestBody Map<String, UserCreateDto> para) {
         UserCreateDto userCreateDto = para.get("user");
+
         User user = userService.login(userCreateDto);
         String token = String.valueOf(ErrorCode.UNAUTHORIZED);
         Map<String,Object> userInfo = new HashMap<>();
