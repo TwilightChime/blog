@@ -8,12 +8,12 @@ import org.springframework.data.domain.Sort;
 @Data
 public class PageRequest {
     @Min(value = 1, message = "页码最小为1")
-    private int pageNumber;
+    private int pageNumber = 1;
 
     @Min(value = 1, message = "每页大小最小为1")
-    private int pageSize;
+    private int pageSize = 5;
 
-    private String sortField;
+    private String sortField = null;
     private String sortOrder = "desc";
 
     public Sort getSort() {

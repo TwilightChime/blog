@@ -3,7 +3,7 @@ package com.twilightchime.blog.dto;
 import lombok.Data;
 
 @Data
-public class TagCreateDto {
+public class TagBaseDTO {
     private Long id;
     private String name;
 }

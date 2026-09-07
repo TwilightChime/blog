@@ -1,6 +1,8 @@
 package com.twilightchime.blog.vo;
 
+import com.twilightchime.blog.dto.BlogBaseDTO;
 import com.twilightchime.blog.entity.Blog;
+import jakarta.annotation.Nonnull;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -9,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class UserVo {
+public class UserDetailVO {
     private Long id;
     private String nickname;
     private String username;
@@ -24,22 +26,5 @@ public class UserVo {
     private LocalDateTime updateTime;
     private LocalDateTime lastLoginTime;
 
-    private List<BlogVo> blogs;
-
-    public void setBlogs(List<Blog> blogs) {
-        this.blogs = blogs.stream().map(blog -> {
-            BlogVo blogVo = new BlogVo();
-            BeanUtils.copyProperties(blog, blogVo, "type", "tags", "user");
-            return blogVo;
-        }).collect(Collectors.toList());
-
-//        if (this.blogs == null) {
-//            this.blogs = new ArrayList<>();
-//        }
-//        for (Blog blog : blogs) {
-//            BlogVo vo = new BlogVo();
-//            BeanUtils.copyProperties(blog, vo);
-//            this.blogs.add(vo);
-//        }
-    }
+    private List<BlogBaseDTO> blogs;
 }

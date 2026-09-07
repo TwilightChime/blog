@@ -1,11 +1,15 @@
-package com.twilightchime.blog.dto;
+package com.twilightchime.blog.vo;
 
+import com.twilightchime.blog.dto.TagBaseDTO;
+import com.twilightchime.blog.dto.TypeBaseDTO;
+import com.twilightchime.blog.dto.UserBaseDTO;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
-public class BlogInfoDto {
+public class BlogDetailVO {
     private Long id;
     private String title;
     private String content;
@@ -20,4 +24,8 @@ public class BlogInfoDto {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private String description;
+
+    private TypeBaseDTO type;
+    private List<TagBaseDTO> tags;
+    private UserBaseDTO user;
 }

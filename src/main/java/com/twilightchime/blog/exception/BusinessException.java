@@ -1,5 +1,6 @@
 package com.twilightchime.blog.exception;
 
+import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +21,10 @@ public class BusinessException extends RuntimeException {
     public BusinessException(String message, Throwable cause) {
         super(message, cause);
         this.code = ErrorCode.BUSINESS_ERROR;
+    }
+
+    public BusinessException(@Nonnull ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.code = errorCode;
     }
 }

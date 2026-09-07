@@ -25,7 +25,7 @@ public class Type {
     private String name;
     private String pic_url;
     private String color;
-    @OneToMany(mappedBy = "type")
+    @OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("type")
     private List<Blog> blogs;
 }

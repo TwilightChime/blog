@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,16 +35,19 @@ public class Blog {
     private boolean commentabled;
     private boolean published;
     private boolean recommend;
+    @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createTime;
+    @LastModifiedDate
     private LocalDateTime updateTime;
     private String description;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("blogs")
     private Type type;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("blogs")
     private List<Tag> tags;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("blogs")
     private User user;
 //    @OneToMany(fetch = FetchType.LAZY)

@@ -1,5 +1,6 @@
 package com.twilightchime.blog.common;
 
+import jakarta.annotation.Nonnull;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 
@@ -16,7 +17,8 @@ public class PageResult<T> {
     private boolean last;       //是否最后一页
 
     // 从Spring Data Page对象构建
-    public static <T> PageResult<T> of(Page<T> page) {
+    @Nonnull
+    public static <T> PageResult<T> of(@Nonnull Page<T> page) {
         PageResult<T> result = new PageResult<>();
         result.setContent(page.getContent());
         result.setNumber(page.getNumber() + 1);

@@ -2,18 +2,28 @@ package com.twilightchime.blog.service;
 
 import com.twilightchime.blog.common.PageRequest;
 import com.twilightchime.blog.common.PageResult;
-import com.twilightchime.blog.dto.UserCreateDto;
-import com.twilightchime.blog.entity.User;
-import com.twilightchime.blog.vo.UserVo;
+import com.twilightchime.blog.dto.request.UserPwdDTO;
+import com.twilightchime.blog.dto.request.UserRequestDTO;
+import com.twilightchime.blog.vo.UserDetailVO;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public interface UserService {
-    User createUser(UserCreateDto userCreateDto);
+    UserDetailVO createUser(UserPwdDTO userPwdDto);
 
-    User login(UserCreateDto userCreateDto);
+    UserDetailVO login(UserPwdDTO userPwdDto);
 
-    User getUser(String username);
+    UserDetailVO getUser(String username);
 
-    User getUser(Long id);
+    UserDetailVO getUser(Long id);
 
-    PageResult<UserVo> getUsersByPage(PageRequest pageRequest);
+    PageResult<UserDetailVO> getUserByPage(PageRequest pageRequest);
+
+    @Transactional(readOnly = true)
+    List<UserDetailVO> getAllUser();
+
+    UserDetailVO saveUser(UserRequestDTO userRequestDto);
+
+    void deleteUser(Long id);
 }

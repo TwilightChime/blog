@@ -1,6 +1,7 @@
 package com.twilightchime.blog.exception;
 
 import com.twilightchime.blog.common.Result;
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -10,13 +11,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
-    public Result<Void> handleBusinessException(BusinessException e) {
+    public Result<Void> handleBusinessException(@Nonnull BusinessException e) {
         log.warn("BusinessException: code={}, msg={}", e.getCode(), e.getMessage());
         return Result.error(e.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public Result<Void> handleResourceNotFound(ResourceNotFoundException e) {
+    public Result<Void> handleResourceNotFound(@Nonnull ResourceNotFoundException e) {
         log.info("ResourceNotFoundException: code={}, msg={}", e.getCode(), e.getMessage());
         return Result.error(e.getCode(), e.getMessage());
     }

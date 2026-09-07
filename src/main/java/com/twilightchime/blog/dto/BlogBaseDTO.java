@@ -1,11 +1,12 @@
 package com.twilightchime.blog.dto;
 
+import com.twilightchime.blog.entity.Blog;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class BlogCreateDto {
+public class BlogBaseDTO {
     private Long id;
     private String title;
     private String content;
@@ -20,4 +21,5 @@ public class BlogCreateDto {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private String description;
+
 }

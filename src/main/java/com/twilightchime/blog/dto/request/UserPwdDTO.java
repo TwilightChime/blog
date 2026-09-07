@@ -1,8 +1,8 @@
-package com.twilightchime.blog.dto;
+package com.twilightchime.blog.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCreateDto {
+public class UserPwdDTO {
     private Long id;
     private String nickname;
 
@@ -35,6 +35,7 @@ public class UserCreateDto {
     private String loginLat;
     private String loginLng;
     private String type;
+    @JsonIgnore
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private LocalDateTime lastLoginTime;

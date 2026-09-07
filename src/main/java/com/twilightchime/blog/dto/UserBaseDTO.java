@@ -5,11 +5,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class UserDto {
+public class UserBaseDTO {
     private Long id;
     private String nickname;
     private String username;
-    private String password;
     private String email;
     private String avatar;
     private String loginProvince;

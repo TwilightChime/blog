@@ -1,9 +1,9 @@
-package com.twilightchime.blog.dto;
+package com.twilightchime.blog.dto.request;
 
 import lombok.Data;
 
 @Data
-public class TypeInfoDto {
+public class TypeRequestDTO {
     private Long id;
     private String name;
     private String pic_url;

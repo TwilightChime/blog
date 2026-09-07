@@ -23,7 +23,7 @@ public class Tag {
             allocationSize = 1)
     private Long id;
     private String name;
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("tags")
     private List<Blog> blogs;
 }

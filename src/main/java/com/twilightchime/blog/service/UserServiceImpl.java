@@ -2,12 +2,16 @@ package com.twilightchime.blog.service;
 
 import com.twilightchime.blog.common.PageRequest;
 import com.twilightchime.blog.common.PageResult;
-import com.twilightchime.blog.convert.UserConvert;
 import com.twilightchime.blog.dao.UserRepository;
-import com.twilightchime.blog.dto.UserCreateDto;
+import com.twilightchime.blog.dto.request.UserPwdDTO;
+import com.twilightchime.blog.dto.request.UserRequestDTO;
 import com.twilightchime.blog.entity.User;
 import com.twilightchime.blog.exception.BusinessException;
-import com.twilightchime.blog.vo.UserVo;
+import com.twilightchime.blog.mapper.request.UserPwdMapper;
+import com.twilightchime.blog.mapper.request.UserRequestMapper;
+import com.twilightchime.blog.mapper.vo.UserDetailMapper;
+import com.twilightchime.blog.vo.UserDetailVO;
+import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -26,41 +29,39 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserConvert userConvert;
+    private final UserDetailMapper userDetailMapper;
+    private final UserPwdMapper userPwdMapper;
+    private final UserRequestMapper userRequestMapper;
 
     @Override
-    public User createUser(UserCreateDto userCreateDto) {
-        if (userRepository.findByUsername(userCreateDto.getUsername()) != null) {
+    public UserDetailVO createUser(@Nonnull UserPwdDTO userPwdDto) {
+        if (userRepository.findByUsername(userPwdDto.getUsername()) != null) {
             throw new BusinessException("用户名已存在");
         }
-        if (userCreateDto.getPassword() == null || userCreateDto.getPassword().equals("")) {
+        if (userPwdDto.getPassword() == null || userPwdDto.getPassword().isEmpty()) {
             throw new BusinessException("密码填写错误");
         }
-        User user = userConvert.toUser(userCreateDto);
-        user.setCreateTime(LocalDateTime.now());
+        User user = userPwdMapper.toEntity(userPwdDto);
         user.setUpdateTime(LocalDateTime.now());
-        return userRepository.save(user);
+        return userDetailMapper.toDetailVO(userRepository.save(user));
     }
 
     @Override
-    public User login(UserCreateDto userCreateDto) {
-        User user = userRepository.findByUsername(userCreateDto.getUsername());
-        if (user == null || !user.getPassword().equals(userCreateDto.getPassword()) ) {
+    public UserDetailVO login(@Nonnull UserPwdDTO userPwdDto) {
+        User user = userRepository.findByUsername(userPwdDto.getUsername());
+        if (user == null || !user.getPassword().equals(userPwdDto.getPassword()) ) {
             throw new BusinessException("用户名或密码错误");
         }
-        user.setLoginProvince(userCreateDto.getLoginProvince());
-        user.setLoginCity(userCreateDto.getLoginCity());
-        user.setLoginLat(userCreateDto.getLoginLat());
-        user.setLoginLng(userCreateDto.getLoginLng());
-        user.setLastLoginTime(LocalDateTime.now());
-        return userRepository.save(user);
+        userPwdMapper.updateEntity(userPwdDto, user);
+        return userDetailMapper.toDetailVO(userRepository.save(user));
     }
 
     @Override
-    public User getUser(String username) {
+    @Transactional(readOnly = true)
+    public UserDetailVO getUser(String username) {
         log.debug("查询用户名{}", username);
         try {
-            return userRepository.findByUsername(username);
+            return userDetailMapper.toDetailVO(userRepository.findByUsername(username));
         } catch (Exception e){
             log.error("查询用户名异常");
             throw new BusinessException(e.getMessage());
@@ -68,20 +69,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(Long id) {
+    @Transactional(readOnly = true)
+    public UserDetailVO getUser(Long id) {
         log.debug("查询用户id{}", id);
-        User user = userRepository.findById(id).orElseThrow(() -> {
+        return userDetailMapper.toDetailVO(userRepository.findById(id).orElseThrow(() -> {
             log.info("该用户id{}不存在", id);
             return new BusinessException("用户id不存在");
-        });
-        return user;
+        }));
     }
 
     @Override
-    public PageResult<UserVo> getUsersByPage(PageRequest pageRequest) {
+    @Transactional(readOnly = true)
+    public PageResult<UserDetailVO> getUserByPage(@Nonnull PageRequest pageRequest) {
         Pageable pageable = org.springframework.data.domain.PageRequest.of(pageRequest.getPageNumber() - 1, pageRequest.getPageSize(), pageRequest.getSort());
         Page<User> userPage = userRepository.findAll(pageable);
-        Page<UserVo> userVoPage = userPage.map(userConvert::toUserVo);
-        return PageResult.of(userVoPage);
+        return userDetailMapper.toPageResult(userPage);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<UserDetailVO> getAllUser() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(userDetailMapper::toDetailVO).toList();
+    }
+
+    @Override
+    public UserDetailVO saveUser(@Nonnull UserRequestDTO userRequestDto){
+        User user = userRepository.findById(userRequestDto.getId()).orElseThrow(() -> new BusinessException("用户id不存在"));
+        userRequestMapper.updateEntity(userRequestDto, user);
+        return userDetailMapper.toDetailVO(userRepository.save(user));
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }
