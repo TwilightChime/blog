@@ -1,6 +1,7 @@
 package com.twilightchime.blog.exception;
 
 import com.twilightchime.blog.common.Result;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
+@Hidden
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)

@@ -40,7 +40,7 @@ public class ImageServiceImpl implements ImageService {
         String fileExtension = getFileExtension(originalFilename);
         String uniqueFileName = UUID.randomUUID() + "." + fileExtension;
 
-        Path uploadPath = Paths.get(fileUploadProperties.getPath());
+        Path uploadPath = Paths.get(fileUploadProperties.getPathImageStorage());
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }

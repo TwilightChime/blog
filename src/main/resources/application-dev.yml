@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: blog
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/myblog?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
+    username: root
+    password: root
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  flyway:
+    enabled: true  # 启用 Flyway
+    locations: classpath:db/migration  # 脚本存放路径
+    baseline-on-migrate: true  # 对已有数据的数据库进行基线化
+
+logging:
+  level:
+    com:
+      blog: debug
+
+file:
+  upload:
+    path: ./uploads/
+    image:
+      path: ./uploads/image/
+      storage:
+        path: ./uploads/image/storage/
+      avatar:
+        path: ./uploads/image/avatar/
+    max-size: 52428800
+    allowed-types: image/jpeg,image/jpg,image/png,image/gif,image/ico
+    thumbnail:
+      width: 200
+      height: 200
+
+spring doc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+#  group-configs:
+#  - group: 'default'
+#    paths-to-match: '/**'
+#    packages-to-scan: com.twilightchime.blog.controller # ????? Controller ???
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+server:
+  port: 8080

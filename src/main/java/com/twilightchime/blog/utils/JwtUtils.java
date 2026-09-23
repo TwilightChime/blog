@@ -6,6 +6,10 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.twilightchime.blog.entity.User;
 import com.twilightchime.blog.vo.UserDetailVO;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 import java.util.Date;
 
@@ -13,6 +17,25 @@ public class JwtUtils {
 
     private static final long EXPIRE_TIME= 10*60*60*1000;
     private static final String TOKEN_SECRET="ChillChime";  //密钥盐
+
+    public String generateToken(UserDetailVO userDetailVO){
+        return Jwts.builder()
+                .setSubject(userDetailVO.getUsername())
+                .claim("userId", userDetailVO.getId())
+                .claim("roles", userDetailVO.getType())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_TIME))
+                .signWith(SignatureAlgorithm.HS256, TOKEN_SECRET)
+                .compact();
+    }
+
+//    public Claims parseToken(String token){
+//        return Jwts.parser()
+//                .verifyWith(Keys.hmacShaKeyFor())
+//                .build()
+//                .parseSignedClaims(token)
+//                .getPayload();
+//    }
 
     /**
      * 签名生成
