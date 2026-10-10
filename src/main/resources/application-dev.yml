@@ -14,8 +14,43 @@ spring:
     enabled: true  # 启用 Flyway
     locations: classpath:db/migration  # 脚本存放路径
     baseline-on-migrate: true  # 对已有数据的数据库进行基线化
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      database: 0
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 10
+          min-idle: 5
+          max-wait: 3000ms
+  RabbitMQ:
+    host: localhost
+    post: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    # 生产者确认机制
+    publisher-config-type: correlated # 消息到达 Exchange 确认
+    publisher-returns: true           # 消息到达 Queue 确认
+    # 消费者配置
+    listener:
+      simple:
+        acknowledge-mode: manual      # 手动 ACK (推荐)
+        prefetch: 10                  # 每次预取 10 条
+        concurrency: 3                # 并发消费者数量
+        max-concurrency: 10           # 最大并发
+        retry:
+          enabled: true               # 开启重试
+          max-attempts: 3             # 最多重试 3 次
+          initial-interval: 1000ms    # 初始间隔
 
 logging:
+  file:
+    path: logs
   level:
     com:
       blog: debug
@@ -54,3 +89,37 @@ knife4j:
 
 server:
   port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # 暴露哪些端点（* 表示全部，生产建议按需开放）
+        include: health,info,metrics,prometheus
+        # 排除敏感端点
+        exclude: env,beans,configprops
+      base-path: /actuator          # 基础路径
+  endpoint:
+    health:
+      # 显示详细信息（生产建议 when-authorized）
+      show-details: always
+      # 是否启用健康检查
+      enabled: true
+    info:
+      enabled: true
+  # 健康检查分组
+  health:
+    # 自定义健康检查超时
+    defaults:
+      enabled: true
+    # 各组件健康检查开关
+    db:
+      enabled: true
+    redis:
+      enabled: true
+    diskspace:
+      enabled: true
+      threshold: 100MB             # 磁盘剩余阈值
+  info:
+    env:
+      enabled: true

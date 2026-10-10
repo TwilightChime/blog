@@ -10,7 +10,9 @@ import com.twilightchime.blog.exception.BusinessException;
 import com.twilightchime.blog.mapper.request.UserPwdMapper;
 import com.twilightchime.blog.mapper.request.UserRequestMapper;
 import com.twilightchime.blog.mapper.vo.UserDetailMapper;
+import com.twilightchime.blog.utils.JwtUtils;
 import com.twilightchime.blog.vo.UserDetailVO;
+import com.twilightchime.blog.vo.UserLoginVO;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +20,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -32,28 +37,49 @@ public class UserServiceImpl implements UserService {
     private final UserDetailMapper userDetailMapper;
     private final UserPwdMapper userPwdMapper;
     private final UserRequestMapper userRequestMapper;
+    private final EmailService emailService;
+    private final JwtUtils jwtUtils;
 
     @Override
-    public UserDetailVO createUser(@Nonnull UserPwdDTO userPwdDto) {
-        if (userRepository.findByUsername(userPwdDto.getUsername()) != null) {
+    public UserLoginVO createUser(UserPwdDTO userPwdDto) {
+        if (userRepository.existsByUsername(userPwdDto.getUsername())) {
             throw new BusinessException("用户名已存在");
         }
-        if (userPwdDto.getPassword() == null || userPwdDto.getPassword().isEmpty()) {
-            throw new BusinessException("密码填写错误");
-        }
+
         User user = userPwdMapper.toEntity(userPwdDto);
         user.setUpdateTime(LocalDateTime.now());
-        return userDetailMapper.toDetailVO(userRepository.save(user));
+        UserDetailVO userDetailVO = userDetailMapper.toDetailVO(userRepository.save(user));
+
+        List<String> roles = Collections.singletonList(userDetailVO.getType());
+        String token = jwtUtils.generateToken(userDetailVO.getUsername(), userDetailVO.getId(), roles);
+
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        emailService.sendWelcomeEmail(userDetailVO.getEmail(), userDetailVO.getUsername());
+                    }
+                }
+        );
+
+        return new UserLoginVO(userDetailVO, token);
     }
 
     @Override
-    public UserDetailVO login(@Nonnull UserPwdDTO userPwdDto) {
+    public UserLoginVO login(UserPwdDTO userPwdDto) {
+
         User user = userRepository.findByUsername(userPwdDto.getUsername());
         if (user == null || !user.getPassword().equals(userPwdDto.getPassword()) ) {
             throw new BusinessException("用户名或密码错误");
         }
         userPwdMapper.updateEntity(userPwdDto, user);
-        return userDetailMapper.toDetailVO(userRepository.save(user));
+
+        UserDetailVO userDetailVO = userDetailMapper.toDetailVO(userRepository.save(user));
+
+        List<String> roles = Collections.singletonList(userDetailVO.getType());
+        String token = jwtUtils.generateToken(userDetailVO.getUsername(), userDetailVO.getId(), roles);
+
+        return new UserLoginVO(userDetailVO, token);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.twilightchime.blog.config;
 
+import com.twilightchime.blog.interceptor.LogInterceptor;
 import com.twilightchime.blog.interceptor.LoginInterceptor;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -18,6 +20,9 @@ public class WebConfiguration implements WebMvcConfigurer {
     private final String fileUploadPath;
     private final LoginInterceptor loginInterceptor;
 
+    @Autowired
+    private LogInterceptor logInterceptor;
+
     public WebConfiguration(
             @Value("${file.upload.path}") String fileUploadPath,
             LoginInterceptor loginInterceptor) {
@@ -27,29 +32,17 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(@Nonnull InterceptorRegistry registry) {
-        List<String> excludePath = new ArrayList<>();
-
-        //排除拦截，除了注册登录(此时还没token)，其他都拦截
-        excludePath.add("/register");  //登录
-        excludePath.add("/login");     //注册
-        excludePath.add("/static/**");  //静态资源
-        excludePath.add("/assets/**");  //静态资源
-//        excludePath.add("/admin/**");
-        registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/admin/**")
-                .excludePathPatterns(excludePath);
-
-        WebMvcConfigurer.super.addInterceptors(registry);
-    }
-
-    @Override
-    public void addCorsMappings(@Nonnull CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("http://localhost:5173")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+        registry.addInterceptor(logInterceptor).addPathPatterns("/**");
+//        List<String> excludePath = new ArrayList<>();
+//        //排除拦截，除了注册登录(此时还没token)，其他都拦截
+//        excludePath.add("/register");  //登录
+//        excludePath.add("/login");     //注册
+//        excludePath.add("/static/**");  //静态资源
+//        excludePath.add("/assets/**");  //静态资源
+//        registry.addInterceptor(loginInterceptor)
+//                .addPathPatterns("/admin/**")
+//                .excludePathPatterns(excludePath);
+//        WebMvcConfigurer.super.addInterceptors(registry);
     }
 
     @Override
@@ -60,4 +53,15 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .setCachePeriod(3600)
                 .resourceChain(true);
     }
+
+    //cors配置已在Spring Security过滤层
+//    @Override
+//    public void addCorsMappings(@Nonnull CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedOriginPatterns("http://localhost:5173")
+//                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+//                .allowedHeaders("*")
+//                .allowCredentials(true)
+//                .maxAge(3600);
+//    }
 }

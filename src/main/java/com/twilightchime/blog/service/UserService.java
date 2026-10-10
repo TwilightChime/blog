@@ -5,14 +5,15 @@ import com.twilightchime.blog.common.PageResult;
 import com.twilightchime.blog.dto.request.UserPwdDTO;
 import com.twilightchime.blog.dto.request.UserRequestDTO;
 import com.twilightchime.blog.vo.UserDetailVO;
+import com.twilightchime.blog.vo.UserLoginVO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface UserService {
-    UserDetailVO createUser(UserPwdDTO userPwdDto);
+    UserLoginVO createUser(UserPwdDTO userPwdDto);
 
-    UserDetailVO login(UserPwdDTO userPwdDto);
+    UserLoginVO login(UserPwdDTO userPwdDto);
 
     UserDetailVO getUser(String username);
 

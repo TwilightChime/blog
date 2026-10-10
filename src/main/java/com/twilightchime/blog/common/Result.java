@@ -15,6 +15,7 @@ public class Result<T> {
     private Integer code;
     private String msg;
     private T data;
+    private T fieldError;
     private Long timestamp;
 
     public static <T> Result<T> ok(String msg) {
@@ -31,6 +32,10 @@ public class Result<T> {
 
     public static <T> Result<T> error(ErrorCode errorCode, String msg) {
         return Result.<T>builder().errorCode(errorCode).code(errorCode.getCode()).msg(msg).timestamp(System.currentTimeMillis()).build();
+    }
+
+    public static <T> Result<T> error(ErrorCode errorCode, String msg, T err) {
+        return Result.<T>builder().errorCode(errorCode).code(errorCode.getCode()).msg(msg).fieldError(err).build();
     }
 
     public static <T> Result<T> error(T data, String msg) {

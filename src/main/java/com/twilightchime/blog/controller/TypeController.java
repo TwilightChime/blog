@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/regs")
 public class TypeController {
 
     private final TypeService typeService;

@@ -13,13 +13,15 @@ import java.util.List;
 public interface BlogService {
     BlogDetailVO getBlogDetail(Long id);
 
-    BlogDetailVO postBlog(BlogRequestDTO blogRequestDTO);
-
     @Transactional(readOnly = true)
     PageResult<BlogDetailVO> getBlogByPage(@Nonnull PageRequest pageRequest);
 
     @Transactional(readOnly = true)
     PageResult<BlogDetailVO> getBlogByPage(@Nonnull PageRequest pageRequest, String keyword, String type);
+
+    BlogDetailVO createBlog(@Nonnull BlogRequestDTO blogRequestDTO);
+
+    BlogDetailVO updateBlog(@Nonnull BlogRequestDTO blogRequestDTO);
 
     void deleteBlog(Long id);
 

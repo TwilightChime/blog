@@ -13,12 +13,13 @@ import jakarta.annotation.Nonnull;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,9 @@ public class BlogServiceImpl implements BlogService {
 
     @Transactional(readOnly = true)
     @Override
+//    @Cacheable(value = "blog:list")
     public PageResult<BlogDetailVO> getBlogByPage(@Nonnull PageRequest pageRequest) {
+        log.debug("查询博客数据分页列表: num={}, size={}", pageRequest.getPageNumber(), pageRequest.getPageSize());
         Pageable pageable = org.springframework.data.domain.PageRequest.of(pageRequest.getPageNumber() - 1, pageRequest.getPageSize(), pageRequest.getSort());
         Page<Blog> blogPage = blogRepository.findAll(pageable);
         return blogDetailMapper.toPageResult(blogPage);
@@ -43,6 +46,7 @@ public class BlogServiceImpl implements BlogService {
     @Transactional(readOnly = true)
     @Override
     public PageResult<BlogDetailVO> getBlogByPage(@Nonnull PageRequest pageRequest, String keyword, String type) {
+        log.debug("查询博客数据分页列表: num={}, size={}, keyword={}, type={}", pageRequest.getPageNumber(), pageRequest.getPageSize(), keyword, type);
         Specification<Blog> specification = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -65,28 +69,55 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    @Cacheable(value = "blog:detail", key = "#id")
     public BlogDetailVO getBlogDetail(Long id) {
-        Blog blog = blogRepository.findById(id).orElseThrow(() -> new BusinessException("Blog Not Found"));
+        log.debug("查询博客详情: blogId={}", id);
+        Blog blog = blogRepository.findById(id).orElseThrow(() -> {
+            log.warn("查询博客不存在: blogId={}", id);
+            return new BusinessException("Blog Not Found");
+        });
         return blogDetailMapper.toDetailVO(blog);
     }
 
     @Override
-    public BlogDetailVO postBlog(@Nonnull BlogRequestDTO blogRequestDTO) {
-        Blog blog;
+    @CacheEvict(value = "blog:list", allEntries = true)
+    public BlogDetailVO createBlog(@Nonnull BlogRequestDTO blogRequestDTO) {
+        log.debug("创建博客: title={}, flag={}", blogRequestDTO.getTitle(), blogRequestDTO.getFlag());
         if (blogRequestDTO.getId() == null) {
             blogRequestDTO.setViews(0);
-            blog = blogRequestMapper.toEntity(blogRequestDTO);
+            Blog blog = blogRequestMapper.toEntity(blogRequestDTO);
+            return blogDetailMapper.toDetailVO(blogRepository.save(blog));
         } else {
-            blog = blogRepository.findById(blogRequestDTO.getId()).orElseThrow(() -> new BusinessException("该博客不存在"));
-            blogRequestMapper.updateEntity(blogRequestDTO, blog);
+            log.warn("创建博客失败, id不为null: blogId={}", blogRequestDTO.getId());
+            throw new BusinessException("博客id有值, 无法创建博客");
         }
+
+    }
+
+    @Override
+    @CacheEvict(value = "blog:detail", key = "#blogRequestDTO.id")
+    public BlogDetailVO updateBlog(@Nonnull BlogRequestDTO blogRequestDTO) {
+        log.debug("更新博客: blogId={}, title={}", blogRequestDTO.getId(), blogRequestDTO.getTitle());
+        if (blogRequestDTO.getId() == null) {
+            log.warn("更新博客失败, id为空: blogTitle={}", blogRequestDTO.getTitle());
+            throw new BusinessException("博客id为空, 无法更新博客");
+        }
+        Blog blog = blogRepository.findById(blogRequestDTO.getId()).orElseThrow(() -> {
+            log.warn("更新博客失败, 博客id不存在: blogId={}", blogRequestDTO.getId());
+            return new BusinessException("该博客id不存在, 无法更新博客");
+        });
+        blogRequestMapper.updateEntity(blogRequestDTO, blog);
         return blogDetailMapper.toDetailVO(blogRepository.save(blog));
     }
 
     @Override
+    @CacheEvict(value = "blog:detail", key = "#id")
     public void deleteBlog(Long id) {
         blogRepository.deleteById(id);
     }
+
+    @CacheEvict(value = "blog:detail", allEntries = true)
+    public void clearCache() {}
 
     @Override
     public Long countBlog() {

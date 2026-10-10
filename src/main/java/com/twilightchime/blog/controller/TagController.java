@@ -5,6 +5,8 @@ import com.twilightchime.blog.common.PageResult;
 import com.twilightchime.blog.common.Result;
 import com.twilightchime.blog.service.TagService;
 import com.twilightchime.blog.vo.TagDetailVO;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +14,15 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/regs")
 public class TagController {
 
     private final TagService tagService;
 
     @GetMapping("/getTagList")
     public Result<PageResult<TagDetailVO>> getTagPage(@RequestParam(required = false) String sortOrder,
-                                                @RequestParam(required = false, defaultValue = "1") String pageNumber,
-                                                @RequestParam(required = false, defaultValue = "5") String pageSize) {
+                                                @RequestParam(required = false, defaultValue = "1") @Min(1) String pageNumber,
+                                                @RequestParam(required = false, defaultValue = "5") @Max(100) String pageSize) {
         PageRequest pageRequest = new PageRequest();
         pageRequest.setPageNumber(Integer.parseInt(pageNumber));
         pageRequest.setPageSize(Integer.parseInt(pageSize));
