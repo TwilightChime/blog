@@ -1,18 +1,20 @@
 package com.twilightchime.blog.controller.admin;
 
-import com.twilightchime.blog.common.PageRequest;
-import com.twilightchime.blog.common.PageResult;
-import com.twilightchime.blog.common.Result;
-import com.twilightchime.blog.dto.request.UserRequestDTO;
+import com.twilightchime.blog.model.common.PageRequest;
+import com.twilightchime.blog.model.common.PageResult;
+import com.twilightchime.blog.model.common.Result;
+import com.twilightchime.blog.model.dto.user.request.UserRequestDTO;
+import com.twilightchime.blog.exception.BusinessException;
 import com.twilightchime.blog.service.UserService;
-import com.twilightchime.blog.vo.UserDetailVO;
-import jakarta.annotation.Nonnull;
+import com.twilightchime.blog.model.vo.UserDetailVO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
@@ -32,36 +34,57 @@ public class UserAdminController {
 //        }
 //    }
 
-    @PostMapping("/getUserPage")
-    public Result<PageResult<UserDetailVO>> getUserPage(@Nonnull @RequestBody Map<String, Object> para) {
-        PageRequest pageRequest = new PageRequest();
-        pageRequest.setPageNumber(Integer.parseInt(para.get("pageNumber").toString()));
-        pageRequest.setPageSize(Integer.parseInt(para.get("pageSize").toString()));
-        pageRequest.setSortField(para.get("sortField").toString());
-        pageRequest.setSortOrder(para.get("sortOrder").toString());
+//    @PostMapping("/getUserPage")
+//    public Result<PageResult<UserDetailVO>> getUserPage(@Nonnull @RequestBody Map<String, Object> para) {
+//        PageRequest pageRequest = new PageRequest();
+//        pageRequest.setPageNumber(Integer.parseInt(para.get("pageNumber").toString()));
+//        pageRequest.setPageSize(Integer.parseInt(para.get("pageSize").toString()));
+//        pageRequest.setSortField(para.get("sortField").toString());
+//        pageRequest.setSortOrder(para.get("sortOrder").toString());
+//
+//        PageResult<UserDetailVO> result = userService.getUserByPage(pageRequest);
+//        return Result.ok("获取用户分页信息", result);
+//    }
 
+    @PostMapping("/user/getUserPage")
+    public Result<PageResult<UserDetailVO>> getUserPage(@Valid @RequestBody PageRequest pageRequest) {
+        log.info("获取用户分页列表请求: num={}, size={}", pageRequest.getPageNumber(), pageRequest.getPageSize());
         PageResult<UserDetailVO> result = userService.getUserByPage(pageRequest);
+        log.info("获取用户分页列表成功: num={}, size={}", pageRequest.getPageNumber(), pageRequest.getPageSize());
         return Result.ok("获取用户分页信息", result);
     }
 
-    @GetMapping("users")
+    @GetMapping("/users")
     public Result<List<UserDetailVO>> getAllUser() {
         return Result.ok("blogList", userService.getAllUser());
     }
 
-    @PostMapping("/user")
-    public Result<UserDetailVO> addUser(@Nonnull @RequestBody Map<String , UserRequestDTO> para) {
-        UserRequestDTO userRequestDto = para.get("user");
+//    @PostMapping("/user")
+//    public Result<UserDetailVO> addUser(@Nonnull @RequestBody Map<String , UserRequestDTO> para) {
+//        UserRequestDTO userRequestDto = para.get("user");
+//        if (userRequestDto.getId() == null) {
+//            return Result.error("更新的用户id为空值");
+//        } else {
+//            return Result.ok("修改用户信息成功", userService.saveUser(userRequestDto));
+//        }
+//    }
+
+    @PostMapping("/user/update")
+    public Result<UserDetailVO> updateUser(@Valid @RequestBody UserRequestDTO userRequestDto) {
+        log.info("修改用户信息请求: userId={}, username={}", userRequestDto.getId(), userRequestDto.getUsername());
         if (userRequestDto.getId() == null) {
-            return Result.error("更新的用户id为空值");
-        } else {
-            return Result.ok("修改用户信息成功", userService.saveUser(userRequestDto));
+            throw new BusinessException("更新用户id不能为空");
         }
+        UserDetailVO userDetailVO = userService.saveUser(userRequestDto);
+        log.info("修改用户信息成功: userId={}, username={}", userRequestDto.getId(), userRequestDto.getUsername());
+        return Result.ok("修改用户信息成功", userDetailVO);
     }
 
     @DeleteMapping("/users/{id}/delete")
     public Result<Void> deleteUser(@PathVariable Long id) {
+        log.info("删除用户请求: userId={}", id);
         userService.deleteUser(id);
+        log.info("删除用户成功: userId={}", id);
         return Result.ok("delete user success");
     }
 

@@ -1,12 +1,11 @@
 package com.twilightchime.blog.service;
 
-import com.twilightchime.blog.common.PageRequest;
-import com.twilightchime.blog.common.PageResult;
-import com.twilightchime.blog.dto.request.BlogRequestDTO;
-import com.twilightchime.blog.vo.BlogDetailVO;
+import com.twilightchime.blog.model.common.PageRequest;
+import com.twilightchime.blog.model.common.PageResult;
+import com.twilightchime.blog.model.dto.blog.request.BlogRequestDTO;
+import com.twilightchime.blog.model.vo.BlogDetailVO;
 import jakarta.annotation.Nonnull;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 

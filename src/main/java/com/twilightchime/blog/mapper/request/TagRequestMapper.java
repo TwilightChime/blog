@@ -1,6 +1,6 @@
 package com.twilightchime.blog.mapper.request;
 
-import com.twilightchime.blog.dto.request.TagRequestDTO;
+import com.twilightchime.blog.model.dto.tag.request.TagRequestDTO;
 import com.twilightchime.blog.entity.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

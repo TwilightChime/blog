@@ -1,4 +1,4 @@
-package com.twilightchime.blog.vo;
+package com.twilightchime.blog.model.vo;
 
 import lombok.*;
 

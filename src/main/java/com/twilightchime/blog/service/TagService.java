@@ -1,9 +1,9 @@
 package com.twilightchime.blog.service;
 
-import com.twilightchime.blog.common.PageRequest;
-import com.twilightchime.blog.common.PageResult;
-import com.twilightchime.blog.dto.request.TagRequestDTO;
-import com.twilightchime.blog.vo.TagDetailVO;
+import com.twilightchime.blog.model.common.PageRequest;
+import com.twilightchime.blog.model.common.PageResult;
+import com.twilightchime.blog.model.dto.tag.request.TagRequestDTO;
+import com.twilightchime.blog.model.vo.TagDetailVO;
 
 import java.util.List;
 

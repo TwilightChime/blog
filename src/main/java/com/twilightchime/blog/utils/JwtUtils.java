@@ -4,7 +4,6 @@ package com.twilightchime.blog.utils;
 //import com.auth0.jwt.JWTVerifier;
 //import com.auth0.jwt.algorithms.Algorithm;
 //import com.auth0.jwt.interfaces.DecodedJWT;
-import com.twilightchime.blog.vo.UserDetailVO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

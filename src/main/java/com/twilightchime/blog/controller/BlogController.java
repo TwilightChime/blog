@@ -1,11 +1,11 @@
 package com.twilightchime.blog.controller;
 
 import com.twilightchime.blog.aspect.RateLimit;
-import com.twilightchime.blog.common.PageRequest;
-import com.twilightchime.blog.common.PageResult;
-import com.twilightchime.blog.common.Result;
+import com.twilightchime.blog.model.common.PageRequest;
+import com.twilightchime.blog.model.common.PageResult;
+import com.twilightchime.blog.model.common.Result;
 import com.twilightchime.blog.service.BlogService;
-import com.twilightchime.blog.vo.BlogDetailVO;
+import com.twilightchime.blog.model.vo.BlogDetailVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
@@ -28,17 +28,17 @@ public class BlogController {
     @GetMapping("/blogs")
     public Result<PageResult<BlogDetailVO>> getBlogPage(@RequestParam(required = false) String sortOrder,
                                                   @RequestParam(required = false, defaultValue = "1") @Min(1) String pageNumber,
-                                                  @RequestParam(required = false, defaultValue = "5") @Max(100) String pageSize) {
-
+                                                  @RequestParam(required = false, defaultValue = "5") @Min(5) @Max(100) String pageSize) {
+        log.info("获取博客分页列表请求: num={}, size={}", pageNumber, pageSize);
         PageRequest pageRequest = new PageRequest();
         pageRequest.setPageNumber(Integer.parseInt(pageNumber));
         pageRequest.setPageSize(Integer.parseInt(pageSize));
 //        pageRequest.setSortField(para.get("sortField").toString());
 //        pageRequest.setSortOrder(para.get("sortOrder").toString());
 
-        log.info("获取博客分页列表请求: num={}, size={}", pageRequest.getPageNumber(), pageRequest.getPageSize());
+
         PageResult<BlogDetailVO> result = blogService.getBlogByPage(pageRequest);
-        log.info("获取博客分页列表成功: num={}, size={}", pageRequest.getPageNumber(), pageRequest.getPageSize());
+        log.info("获取博客分页列表成功: num={}, size={}", pageNumber, pageSize);
         return Result.ok("获取blog分页信息", result);
     }
 

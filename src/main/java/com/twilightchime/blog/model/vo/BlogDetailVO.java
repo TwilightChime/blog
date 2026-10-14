@@ -1,8 +1,8 @@
-package com.twilightchime.blog.vo;
+package com.twilightchime.blog.model.vo;
 
-import com.twilightchime.blog.dto.TagBaseDTO;
-import com.twilightchime.blog.dto.TypeBaseDTO;
-import com.twilightchime.blog.dto.UserBaseDTO;
+import com.twilightchime.blog.model.dto.tag.TagBaseDTO;
+import com.twilightchime.blog.model.dto.type.TypeBaseDTO;
+import com.twilightchime.blog.model.dto.user.UserBaseDTO;
 import lombok.Data;
 
 import java.time.LocalDateTime;

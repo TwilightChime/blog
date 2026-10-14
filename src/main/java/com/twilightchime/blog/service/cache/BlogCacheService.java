@@ -1,6 +1,6 @@
 package com.twilightchime.blog.service.cache;
 
-import com.twilightchime.blog.vo.BlogDetailVO;
+import com.twilightchime.blog.model.vo.BlogDetailVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

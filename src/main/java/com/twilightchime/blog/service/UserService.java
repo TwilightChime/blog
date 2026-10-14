@@ -1,11 +1,11 @@
 package com.twilightchime.blog.service;
 
-import com.twilightchime.blog.common.PageRequest;
-import com.twilightchime.blog.common.PageResult;
-import com.twilightchime.blog.dto.request.UserPwdDTO;
-import com.twilightchime.blog.dto.request.UserRequestDTO;
-import com.twilightchime.blog.vo.UserDetailVO;
-import com.twilightchime.blog.vo.UserLoginVO;
+import com.twilightchime.blog.model.common.PageRequest;
+import com.twilightchime.blog.model.common.PageResult;
+import com.twilightchime.blog.model.dto.user.request.UserPwdDTO;
+import com.twilightchime.blog.model.dto.user.request.UserRequestDTO;
+import com.twilightchime.blog.model.vo.UserDetailVO;
+import com.twilightchime.blog.model.vo.UserLoginVO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.twilightchime.blog.controller.admin;
 
-import com.twilightchime.blog.common.Result;
+import com.twilightchime.blog.model.common.Result;
 import com.twilightchime.blog.service.BlogService;
 import com.twilightchime.blog.service.TagService;
 import com.twilightchime.blog.service.TypeService;

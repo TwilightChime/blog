@@ -1,17 +1,11 @@
-package com.twilightchime.blog.vo;
+package com.twilightchime.blog.model.dto.user;
 
-import com.twilightchime.blog.dto.BlogBaseDTO;
-import com.twilightchime.blog.entity.Blog;
-import jakarta.annotation.Nonnull;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
-public class UserDetailVO {
+public class UserBaseDTO {
     private Long id;
     private String nickname;
     private String username;
@@ -25,6 +19,4 @@ public class UserDetailVO {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private LocalDateTime lastLoginTime;
-
-    private List<BlogBaseDTO> blogs;
 }

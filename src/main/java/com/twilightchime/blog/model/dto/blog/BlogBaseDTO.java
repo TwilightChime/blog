@@ -1,6 +1,5 @@
-package com.twilightchime.blog.dto;
+package com.twilightchime.blog.model.dto.blog;
 
-import com.twilightchime.blog.entity.Blog;
 import lombok.Data;
 
 import java.time.LocalDateTime;

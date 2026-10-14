@@ -1,4 +1,4 @@
-package com.twilightchime.blog.common;
+package com.twilightchime.blog.model.common;
 
 import com.twilightchime.blog.exception.ErrorCode;
 import lombok.AllArgsConstructor;

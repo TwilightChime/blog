@@ -1,6 +1,6 @@
 package com.twilightchime.blog.exception;
 
-import com.twilightchime.blog.common.Result;
+import com.twilightchime.blog.model.common.Result;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.ConstraintViolationException;
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
         Map<String, String> fieldErrors = new LinkedHashMap<>();
         e.getBindingResult().getFieldErrors().forEach((fieldError) -> {fieldErrors.put(fieldError.getField(), fieldError.getDefaultMessage());});
         log.warn("[参数校验失败] 字段错误: {}", fieldErrors);
-        return Result.error(ErrorCode.PARAM_VALIDATION_FAILED, "VALIDATION_FATLED", fieldErrors);
+        return Result.error(ErrorCode.PARAM_VALIDATION_FAILED, "VALIDATION_FAILED", fieldErrors);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
         Map<String, String> fieldErrors = new LinkedHashMap<>();
         e.getConstraintViolations().forEach((constraintViolation) -> {fieldErrors.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());});
         log.warn("[参数校验失败] 约束违规: {}", fieldErrors);
-        return Result.error(ErrorCode.PARAM_VALIDATION_FAILED, "VALIDATION_FATLED", fieldErrors);
+        return Result.error(ErrorCode.PARAM_VALIDATION_FAILED, "VALIDATION_FAILED", fieldErrors);
     }
 
     @ExceptionHandler(BindException.class)
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
         Map<String, String> fieldErrors = new LinkedHashMap<>();
         e.getFieldErrors().forEach((fieldError) -> {fieldErrors.put(fieldError.getField(), fieldError.getDefaultMessage());});
         log.warn("[参数校验失败] 绑定错误: {}", fieldErrors);
-        return Result.error(ErrorCode.PARAM_VALIDATION_FAILED, "VALIDATION_FATLED", fieldErrors);
+        return Result.error(ErrorCode.PARAM_VALIDATION_FAILED, "VALIDATION_FAILED", fieldErrors);
     }
 
     @ExceptionHandler(Exception.class)

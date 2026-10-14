@@ -1,9 +1,9 @@
 package com.twilightchime.blog.mapper.vo;
 
-import com.twilightchime.blog.common.PageResult;
+import com.twilightchime.blog.model.common.PageResult;
 import com.twilightchime.blog.entity.User;
 import com.twilightchime.blog.mapper.BlogBaseMapper;
-import com.twilightchime.blog.vo.UserDetailVO;
+import com.twilightchime.blog.model.vo.UserDetailVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,6 @@
 package com.twilightchime.blog.mapper.request;
 
-import com.twilightchime.blog.dto.request.TypeRequestDTO;
+import com.twilightchime.blog.model.dto.type.request.TypeRequestDTO;
 import com.twilightchime.blog.entity.Type;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

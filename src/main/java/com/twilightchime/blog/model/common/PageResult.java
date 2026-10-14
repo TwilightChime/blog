@@ -1,4 +1,4 @@
-package com.twilightchime.blog.common;
+package com.twilightchime.blog.model.common;
 
 import jakarta.annotation.Nonnull;
 import lombok.Data;

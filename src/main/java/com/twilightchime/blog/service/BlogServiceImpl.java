@@ -1,14 +1,14 @@
 package com.twilightchime.blog.service;
 
-import com.twilightchime.blog.common.PageRequest;
-import com.twilightchime.blog.common.PageResult;
+import com.twilightchime.blog.model.common.PageRequest;
+import com.twilightchime.blog.model.common.PageResult;
 import com.twilightchime.blog.dao.BlogRepository;
-import com.twilightchime.blog.dto.request.BlogRequestDTO;
+import com.twilightchime.blog.model.dto.blog.request.BlogRequestDTO;
 import com.twilightchime.blog.entity.Blog;
 import com.twilightchime.blog.exception.BusinessException;
 import com.twilightchime.blog.mapper.request.BlogRequestMapper;
 import com.twilightchime.blog.mapper.vo.BlogDetailMapper;
-import com.twilightchime.blog.vo.BlogDetailVO;
+import com.twilightchime.blog.model.vo.BlogDetailVO;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
 //    @Cacheable(value = "blog:list")
     public PageResult<BlogDetailVO> getBlogByPage(@Nonnull PageRequest pageRequest) {
-        log.debug("查询博客数据分页列表: num={}, size={}", pageRequest.getPageNumber(), pageRequest.getPageSize());
+        log.info("查询博客数据分页列表: num={}, size={}", pageRequest.getPageNumber(), pageRequest.getPageSize());
         Pageable pageable = org.springframework.data.domain.PageRequest.of(pageRequest.getPageNumber() - 1, pageRequest.getPageSize(), pageRequest.getSort());
         Page<Blog> blogPage = blogRepository.findAll(pageable);
         return blogDetailMapper.toPageResult(blogPage);
@@ -46,7 +46,7 @@ public class BlogServiceImpl implements BlogService {
     @Transactional(readOnly = true)
     @Override
     public PageResult<BlogDetailVO> getBlogByPage(@Nonnull PageRequest pageRequest, String keyword, String type) {
-        log.debug("查询博客数据分页列表: num={}, size={}, keyword={}, type={}", pageRequest.getPageNumber(), pageRequest.getPageSize(), keyword, type);
+        log.info("查询博客数据分页列表: num={}, size={}, keyword={}, type={}", pageRequest.getPageNumber(), pageRequest.getPageSize(), keyword, type);
         Specification<Blog> specification = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -71,7 +71,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     @Cacheable(value = "blog:detail", key = "#id")
     public BlogDetailVO getBlogDetail(Long id) {
-        log.debug("查询博客详情: blogId={}", id);
+        log.info("查询博客详情: blogId={}", id);
         Blog blog = blogRepository.findById(id).orElseThrow(() -> {
             log.warn("查询博客不存在: blogId={}", id);
             return new BusinessException("Blog Not Found");
@@ -81,8 +81,8 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     @CacheEvict(value = "blog:list", allEntries = true)
-    public BlogDetailVO createBlog(@Nonnull BlogRequestDTO blogRequestDTO) {
-        log.debug("创建博客: title={}, flag={}", blogRequestDTO.getTitle(), blogRequestDTO.getFlag());
+    public BlogDetailVO createBlog(BlogRequestDTO blogRequestDTO) {
+        log.info("创建博客: title={}, flag={}", blogRequestDTO.getTitle(), blogRequestDTO.getFlag());
         if (blogRequestDTO.getId() == null) {
             blogRequestDTO.setViews(0);
             Blog blog = blogRequestMapper.toEntity(blogRequestDTO);
@@ -97,7 +97,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     @CacheEvict(value = "blog:detail", key = "#blogRequestDTO.id")
     public BlogDetailVO updateBlog(@Nonnull BlogRequestDTO blogRequestDTO) {
-        log.debug("更新博客: blogId={}, title={}", blogRequestDTO.getId(), blogRequestDTO.getTitle());
+        log.info("更新博客: blogId={}, title={}", blogRequestDTO.getId(), blogRequestDTO.getTitle());
         if (blogRequestDTO.getId() == null) {
             log.warn("更新博客失败, id为空: blogTitle={}", blogRequestDTO.getTitle());
             throw new BusinessException("博客id为空, 无法更新博客");

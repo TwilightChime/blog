@@ -1,4 +1,4 @@
-package com.twilightchime.blog.dto.request;
+package com.twilightchime.blog.model.dto.user.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;

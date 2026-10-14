@@ -1,4 +1,4 @@
-package com.twilightchime.blog.dto;
+package com.twilightchime.blog.model.dto.tag;
 
 import lombok.Data;
 

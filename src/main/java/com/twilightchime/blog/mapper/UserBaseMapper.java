@@ -1,6 +1,6 @@
 package com.twilightchime.blog.mapper;
 
-import com.twilightchime.blog.dto.UserBaseDTO;
+import com.twilightchime.blog.model.dto.user.UserBaseDTO;
 import com.twilightchime.blog.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

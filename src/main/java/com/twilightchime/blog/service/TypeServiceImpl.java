@@ -1,14 +1,14 @@
 package com.twilightchime.blog.service;
 
-import com.twilightchime.blog.common.PageRequest;
-import com.twilightchime.blog.common.PageResult;
+import com.twilightchime.blog.model.common.PageRequest;
+import com.twilightchime.blog.model.common.PageResult;
 import com.twilightchime.blog.dao.TypeRepository;
-import com.twilightchime.blog.dto.request.TypeRequestDTO;
+import com.twilightchime.blog.model.dto.type.request.TypeRequestDTO;
 import com.twilightchime.blog.entity.Type;
 import com.twilightchime.blog.exception.BusinessException;
 import com.twilightchime.blog.mapper.request.TypeRequestMapper;
 import com.twilightchime.blog.mapper.vo.TypeDetailMapper;
-import com.twilightchime.blog.vo.TypeDetailVO;
+import com.twilightchime.blog.model.vo.TypeDetailVO;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

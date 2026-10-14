@@ -1,9 +1,9 @@
 package com.twilightchime.blog.service;
 
-import com.twilightchime.blog.common.PageRequest;
-import com.twilightchime.blog.common.PageResult;
-import com.twilightchime.blog.dto.request.TypeRequestDTO;
-import com.twilightchime.blog.vo.TypeDetailVO;
+import com.twilightchime.blog.model.common.PageRequest;
+import com.twilightchime.blog.model.common.PageResult;
+import com.twilightchime.blog.model.dto.type.request.TypeRequestDTO;
+import com.twilightchime.blog.model.vo.TypeDetailVO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

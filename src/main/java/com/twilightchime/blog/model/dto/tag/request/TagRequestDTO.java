@@ -1,4 +1,4 @@
-package com.twilightchime.blog.dto.request;
+package com.twilightchime.blog.model.dto.tag.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

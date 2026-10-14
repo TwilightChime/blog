@@ -1,6 +1,6 @@
-package com.twilightchime.blog.vo;
+package com.twilightchime.blog.model.vo;
 
-import com.twilightchime.blog.dto.BlogBaseDTO;
+import com.twilightchime.blog.model.dto.blog.BlogBaseDTO;
 import lombok.Data;
 
 import java.util.List;

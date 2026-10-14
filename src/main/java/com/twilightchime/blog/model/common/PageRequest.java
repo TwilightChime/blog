@@ -1,5 +1,6 @@
-package com.twilightchime.blog.common;
+package com.twilightchime.blog.model.common;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,8 @@ public class PageRequest {
     @Min(value = 1, message = "页码最小为1")
     private int pageNumber = 1;
 
-    @Min(value = 1, message = "每页大小最小为1")
+    @Min(value = 5, message = "每页大小最小为5")
+    @Max(value = 100, message = "每页大小最大为100")
     private int pageSize = 5;
 
     private String sortField = null;

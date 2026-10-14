@@ -1,9 +1,9 @@
 package com.twilightchime.blog.controller.admin;
 
-import com.twilightchime.blog.common.Result;
-import com.twilightchime.blog.dto.request.TypeRequestDTO;
+import com.twilightchime.blog.model.common.Result;
+import com.twilightchime.blog.model.dto.type.request.TypeRequestDTO;
 import com.twilightchime.blog.service.TypeService;
-import com.twilightchime.blog.vo.TypeDetailVO;
+import com.twilightchime.blog.model.vo.TypeDetailVO;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

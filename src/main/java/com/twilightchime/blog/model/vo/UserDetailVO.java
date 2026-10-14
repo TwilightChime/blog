@@ -1,23 +1,16 @@
-package com.twilightchime.blog.dto.request;
+package com.twilightchime.blog.model.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import com.twilightchime.blog.model.dto.blog.BlogBaseDTO;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
-public class UserRequestDTO {
-    @Min(value = 1, message = "用户id不能小于1")
+public class UserDetailVO {
     private Long id;
     private String nickname;
-
-    @NotBlank(message = "用户名不为空")
     private String username;
-
-    @Email(message = "邮箱格式错误")
     private String email;
     private String avatar;
     private String loginProvince;
@@ -25,8 +18,9 @@ public class UserRequestDTO {
     private String loginLat;
     private String loginLng;
     private String type;
-    @JsonIgnore
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private LocalDateTime lastLoginTime;
+
+    private List<BlogBaseDTO> blogs;
 }

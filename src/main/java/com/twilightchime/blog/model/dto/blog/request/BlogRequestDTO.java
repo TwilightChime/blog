@@ -1,4 +1,4 @@
-package com.twilightchime.blog.dto.request;
+package com.twilightchime.blog.model.dto.blog.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;

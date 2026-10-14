@@ -1,18 +1,18 @@
 package com.twilightchime.blog.service;
 
-import com.twilightchime.blog.common.PageRequest;
-import com.twilightchime.blog.common.PageResult;
+import com.twilightchime.blog.model.common.PageRequest;
+import com.twilightchime.blog.model.common.PageResult;
 import com.twilightchime.blog.dao.UserRepository;
-import com.twilightchime.blog.dto.request.UserPwdDTO;
-import com.twilightchime.blog.dto.request.UserRequestDTO;
+import com.twilightchime.blog.model.dto.user.request.UserPwdDTO;
+import com.twilightchime.blog.model.dto.user.request.UserRequestDTO;
 import com.twilightchime.blog.entity.User;
 import com.twilightchime.blog.exception.BusinessException;
 import com.twilightchime.blog.mapper.request.UserPwdMapper;
 import com.twilightchime.blog.mapper.request.UserRequestMapper;
 import com.twilightchime.blog.mapper.vo.UserDetailMapper;
 import com.twilightchime.blog.utils.JwtUtils;
-import com.twilightchime.blog.vo.UserDetailVO;
-import com.twilightchime.blog.vo.UserLoginVO;
+import com.twilightchime.blog.model.vo.UserDetailVO;
+import com.twilightchime.blog.model.vo.UserLoginVO;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
