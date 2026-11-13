@@ -1,5 +1,8 @@
 package com.twilightchime.blog.service;
 
+import com.twilightchime.blog.convert.request.UserPwdConvert;
+import com.twilightchime.blog.convert.request.UserRequestConvert;
+import com.twilightchime.blog.convert.vo.UserDetailConvert;
 import com.twilightchime.blog.model.common.PageRequest;
 import com.twilightchime.blog.model.common.PageResult;
 import com.twilightchime.blog.dao.UserRepository;
@@ -7,9 +10,6 @@ import com.twilightchime.blog.model.dto.user.request.UserPwdDTO;
 import com.twilightchime.blog.model.dto.user.request.UserRequestDTO;
 import com.twilightchime.blog.entity.User;
 import com.twilightchime.blog.exception.BusinessException;
-import com.twilightchime.blog.mapper.request.UserPwdMapper;
-import com.twilightchime.blog.mapper.request.UserRequestMapper;
-import com.twilightchime.blog.mapper.vo.UserDetailMapper;
 import com.twilightchime.blog.utils.JwtUtils;
 import com.twilightchime.blog.model.vo.UserDetailVO;
 import com.twilightchime.blog.model.vo.UserLoginVO;
@@ -34,9 +34,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserDetailMapper userDetailMapper;
-    private final UserPwdMapper userPwdMapper;
-    private final UserRequestMapper userRequestMapper;
+    private final UserDetailConvert userDetailConvert;
+    private final UserPwdConvert userPwdConvert;
+    private final UserRequestConvert userRequestConvert;
     private final EmailService emailService;
     private final JwtUtils jwtUtils;
 
@@ -46,9 +46,9 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException("用户名已存在");
         }
 
-        User user = userPwdMapper.toEntity(userPwdDto);
+        User user = userPwdConvert.toEntity(userPwdDto);
         user.setUpdateTime(LocalDateTime.now());
-        UserDetailVO userDetailVO = userDetailMapper.toDetailVO(userRepository.save(user));
+        UserDetailVO userDetailVO = userDetailConvert.toDetailVO(userRepository.save(user));
 
         List<String> roles = Collections.singletonList(userDetailVO.getType());
         String token = jwtUtils.generateToken(userDetailVO.getUsername(), userDetailVO.getId(), roles);
@@ -72,9 +72,9 @@ public class UserServiceImpl implements UserService {
         if (user == null || !user.getPassword().equals(userPwdDto.getPassword()) ) {
             throw new BusinessException("用户名或密码错误");
         }
-        userPwdMapper.updateEntity(userPwdDto, user);
+        userPwdConvert.updateEntity(userPwdDto, user);
 
-        UserDetailVO userDetailVO = userDetailMapper.toDetailVO(userRepository.save(user));
+        UserDetailVO userDetailVO = userDetailConvert.toDetailVO(userRepository.save(user));
 
         List<String> roles = Collections.singletonList(userDetailVO.getType());
         String token = jwtUtils.generateToken(userDetailVO.getUsername(), userDetailVO.getId(), roles);
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
     public UserDetailVO getUser(String username) {
         log.debug("查询用户名{}", username);
         try {
-            return userDetailMapper.toDetailVO(userRepository.findByUsername(username));
+            return userDetailConvert.toDetailVO(userRepository.findByUsername(username));
         } catch (Exception e){
             log.error("查询用户名异常");
             throw new BusinessException(e.getMessage());
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserDetailVO getUser(Long id) {
         log.debug("查询用户id{}", id);
-        return userDetailMapper.toDetailVO(userRepository.findById(id).orElseThrow(() -> {
+        return userDetailConvert.toDetailVO(userRepository.findById(id).orElseThrow(() -> {
             log.info("该用户id{}不存在", id);
             return new BusinessException("用户id不存在");
         }));
@@ -109,25 +109,30 @@ public class UserServiceImpl implements UserService {
     public PageResult<UserDetailVO> getUserByPage(@Nonnull PageRequest pageRequest) {
         Pageable pageable = org.springframework.data.domain.PageRequest.of(pageRequest.getPageNumber() - 1, pageRequest.getPageSize(), pageRequest.getSort());
         Page<User> userPage = userRepository.findAll(pageable);
-        return userDetailMapper.toPageResult(userPage);
+        return userDetailConvert.toPageResult(userPage);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<UserDetailVO> getAllUser() {
         List<User> users = userRepository.findAll();
-        return users.stream().map(userDetailMapper::toDetailVO).toList();
+        return users.stream().map(userDetailConvert::toDetailVO).toList();
     }
 
     @Override
     public UserDetailVO saveUser(@Nonnull UserRequestDTO userRequestDto){
         User user = userRepository.findById(userRequestDto.getId()).orElseThrow(() -> new BusinessException("用户id不存在"));
-        userRequestMapper.updateEntity(userRequestDto, user);
-        return userDetailMapper.toDetailVO(userRepository.save(user));
+        userRequestConvert.updateEntity(userRequestDto, user);
+        return userDetailConvert.toDetailVO(userRepository.save(user));
     }
 
     @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public User getUserOrThrow(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new BusinessException("用户id不存在"));
     }
 }

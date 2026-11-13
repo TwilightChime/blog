@@ -26,4 +26,8 @@ public class Tag {
     @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("tags")
     private List<Blog> blogs;
+
+    public Tag(String name) {
+        this.name = name;
+    }
 }

@@ -21,17 +21,18 @@ public class BlogRequestDTO {
 
     @NotBlank(message = "博客内容不能为空")
     private String content;
+    private String description;
     private String firstPicture;
     private String flag;
-    private Integer views;
-    private Integer appreciation;
-    private boolean shareStatement;
-    private boolean commentabled;
-    private boolean published;
-    private boolean recommend;
-    @JsonIgnore
-    private LocalDateTime createTime;
-    @JsonIgnore
-    private LocalDateTime updateTime;
-    private String description;
+
+//    private Integer views;
+//    private Integer appreciation;
+//    private boolean shareStatement;
+//    private boolean sponsored;
+//    private boolean published;
+//    private boolean recommend;
+//    @JsonIgnore
+//    private LocalDateTime createTime;
+//    @JsonIgnore
+//    private LocalDateTime updateTime;
 }

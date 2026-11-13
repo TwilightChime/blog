@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/regs")
+@RequestMapping("/api")
 public class TypeController {
 
     private final TypeService typeService;

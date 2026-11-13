@@ -2,25 +2,26 @@ package com.twilightchime.blog.service;
 
 import com.twilightchime.blog.model.common.PageRequest;
 import com.twilightchime.blog.model.common.PageResult;
-import com.twilightchime.blog.model.dto.blog.request.BlogRequestDTO;
+import com.twilightchime.blog.model.dto.blog.request.BlogCreateRequest;
+import com.twilightchime.blog.model.dto.blog.request.BlogPageRequest;
+import com.twilightchime.blog.model.dto.blog.request.BlogUpdateRequest;
 import com.twilightchime.blog.model.vo.BlogDetailVO;
-import jakarta.annotation.Nonnull;
-import org.springframework.transaction.annotation.Transactional;
+import com.twilightchime.blog.model.vo.BlogVO;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BlogService {
+
+    PageResult<BlogDetailVO> getBlogByPage(PageRequest pageRequest);
+
+    PageResult<BlogVO> getBlogByPage(BlogPageRequest blogPageRequest);
+
     BlogDetailVO getBlogDetail(Long id);
 
-    @Transactional(readOnly = true)
-    PageResult<BlogDetailVO> getBlogByPage(@Nonnull PageRequest pageRequest);
+    BlogDetailVO createBlog(BlogCreateRequest blogCreateRequest, Long typeId, Set<String> tagNameList, Long userId);
 
-    @Transactional(readOnly = true)
-    PageResult<BlogDetailVO> getBlogByPage(@Nonnull PageRequest pageRequest, String keyword, String type);
-
-    BlogDetailVO createBlog(@Nonnull BlogRequestDTO blogRequestDTO);
-
-    BlogDetailVO updateBlog(@Nonnull BlogRequestDTO blogRequestDTO);
+    BlogDetailVO updateBlog(BlogUpdateRequest blogUpdateRequest, Long typeId, Set<String> tagNameList);
 
     void deleteBlog(Long id);
 

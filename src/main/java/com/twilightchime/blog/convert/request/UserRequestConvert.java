@@ -1,4 +1,4 @@
-package com.twilightchime.blog.mapper.request;
+package com.twilightchime.blog.convert.request;
 
 import com.twilightchime.blog.model.dto.user.request.UserRequestDTO;
 import com.twilightchime.blog.entity.User;
@@ -8,7 +8,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface UserRequestMapper {
+public interface UserRequestConvert {
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "blogs", ignore = true)
     User toEntity(UserRequestDTO dto);

@@ -41,7 +41,7 @@ public class SecurityConfig {
                 // 4. 配置路径权限
                 .authorizeHttpRequests(auth -> auth
                         // 放行认证接口
-                        .requestMatchers("/regs/**", "/login", "/register").permitAll()
+                        .requestMatchers("/api/**", "api/login", "api/register").permitAll()
                         // 放行 Swagger / Knife4j 相关资源
                         .requestMatchers(
                                 "/doc.html",
@@ -70,7 +70,8 @@ public class SecurityConfig {
         config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:5173",   // Vite 默认
                 "http://localhost:3000",   // Vue CLI 默认
-                "http://127.0.0.1:5173"
+                "http://127.0.0.1:5173",
+                "http://localhost:5174"
         ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setAllowedHeaders(List.of("*"));

@@ -6,6 +6,6 @@ import lombok.Data;
 public class TypeBaseDTO {
     private Long id;
     private String name;
-    private String pic_url;
+    private String picUrl;
     private String color;
 }

@@ -1,5 +1,6 @@
 package com.twilightchime.blog.service;
 
+import com.twilightchime.blog.entity.User;
 import com.twilightchime.blog.model.common.PageRequest;
 import com.twilightchime.blog.model.common.PageResult;
 import com.twilightchime.blog.model.dto.user.request.UserPwdDTO;
@@ -27,4 +28,6 @@ public interface UserService {
     UserDetailVO saveUser(UserRequestDTO userRequestDto);
 
     void deleteUser(Long id);
+
+    User getUserOrThrow(Long id);
 }

@@ -2,9 +2,6 @@ package com.twilightchime.blog.controller.admin;
 
 import com.twilightchime.blog.model.common.Result;
 import com.twilightchime.blog.service.BlogService;
-import com.twilightchime.blog.service.TagService;
-import com.twilightchime.blog.service.TypeService;
-import com.twilightchime.blog.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +14,6 @@ import java.util.List;
 @RequestMapping("/admin")
 public class IndexAdminController {
     private final BlogService blogService;
-    private final TagService tagService;
-    private final TypeService typeService;
-    private final UserService userService;
-
 
     @GetMapping("/getBlogCount")
     public Result<Long> getBlogList() {

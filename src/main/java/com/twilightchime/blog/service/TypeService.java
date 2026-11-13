@@ -1,5 +1,6 @@
 package com.twilightchime.blog.service;
 
+import com.twilightchime.blog.entity.Type;
 import com.twilightchime.blog.model.common.PageRequest;
 import com.twilightchime.blog.model.common.PageResult;
 import com.twilightchime.blog.model.dto.type.request.TypeRequestDTO;
@@ -18,4 +19,6 @@ public interface TypeService {
     TypeDetailVO postType(TypeRequestDTO typeRequestDTO);
 
     void deleteType(Long id);
+
+    Type getByIdOrThrow(Long id);
 }

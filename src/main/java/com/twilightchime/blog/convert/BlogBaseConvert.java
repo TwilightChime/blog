@@ -1,4 +1,4 @@
-package com.twilightchime.blog.mapper;
+package com.twilightchime.blog.convert;
 
 import com.twilightchime.blog.model.dto.blog.BlogBaseDTO;
 import com.twilightchime.blog.entity.Blog;
@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface BlogBaseMapper {
+public interface BlogBaseConvert {
     BlogBaseDTO toBaseDTO(Blog entity);
 
     @Mapping(target = "type", ignore = true)

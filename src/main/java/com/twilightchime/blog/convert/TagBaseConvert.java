@@ -1,4 +1,4 @@
-package com.twilightchime.blog.mapper;
+package com.twilightchime.blog.convert;
 
 import com.twilightchime.blog.model.dto.tag.TagBaseDTO;
 import com.twilightchime.blog.entity.Tag;
@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface TagBaseMapper {
+public interface TagBaseConvert {
     TagBaseDTO toBaseDTO(Tag entity);
 
     @Mapping(target = "blogs", ignore = true)

@@ -1,10 +1,13 @@
 package com.twilightchime.blog.model.common;
 
+import com.twilightchime.blog.exception.BusinessException;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import java.util.Set;
 
 @Data
 public class PageRequest {
@@ -18,11 +21,16 @@ public class PageRequest {
     private String sortField = null;
     private String sortOrder = "desc";
 
+    private static final Set<String> ALLOWED_SORT_FIELDS = Set.of("id", "createTime", "updateTime", "views");
+
     public Sort getSort() {
         if (sortField == null || sortField.trim().isEmpty()) {
             return Sort.unsorted();
         }
-        Sort.Direction direction = Sort.Direction.fromString(sortOrder.equalsIgnoreCase("asc") ? "asc" : "desc");
+        if (!ALLOWED_SORT_FIELDS.contains(sortField)) {
+            throw new BusinessException("非法字段排序: " + sortField);
+        }
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC ;
         return Sort.by(direction, sortField);
     }
 

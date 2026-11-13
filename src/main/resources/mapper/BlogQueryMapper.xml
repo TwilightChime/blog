@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+        <!-- namespace必须与对应的Mapper接口全限定名一致 -->
+<mapper namespace="com.twilightchime.blog.mapper.BlogQueryMapper">
+    <resultMap id="BlogQueryMap" type="com.twilightchime.blog.model.vo.BlogVO">
+        <!-- 基本字段 -->
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="flag" column="flag"/>
+        <result property="views" column="views"/>
+        <result property="appreciation" column="appreciation"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+
+        <!-- 一对一：分类（列名加前缀 type_ 避免冲突） -->
+        <association property="type" javaType="com.twilightchime.blog.model.dto.type.TypeBaseDTO" columnPrefix="type_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="picUrl" column="pic_url"/>
+            <result property="color" column="color"/>
+        </association>
+
+        <!-- 一对一：作者 -->
+        <association property="user" javaType="com.twilightchime.blog.model.dto.user.UserBaseDTO" columnPrefix="user_">
+            <id property="id" column="id"/>
+            <result property="nickname" column="nickname"/>
+            <result property="username" column="username"/>
+            <result property="email" column="email"/>
+            <result property="avatar" column="avatar"/>
+            <result property="loginProvince" column="login_province"/>
+            <result property="loginCity" column="login_city"/>
+            <result property="loginLat" column="login_lat"/>
+            <result property="loginLng" column="login_lng"/>
+            <result property="type" column="type"/>
+            <result property="createTime" column="create_time"/>
+            <result property="updateTime" column="update_time"/>
+            <result property="lastLoginTime" column="last_login_time"/>
+        </association>
+
+        <!-- 多对多：标签（一个博客多行标签，靠 id 去重合并） -->
+<!--        <collection property="tags" ofType="com.twilightchime.blog.model.vo.TagDetailVO"-->
+<!--                    columnPrefix="tag_">-->
+<!--            <id property="id" column="id"/>-->
+<!--            <result property="name" column="name"/>-->
+<!--        </collection>-->
+    </resultMap>
+
+    <sql id="BlogColumns">
+        b.id            AS blog_id,
+        b.title         AS blog_title,
+        b.description   AS blog_description,
+        b.first_picture AS blog_first_picture,
+        b.flag          AS blog_flag,
+        b.views         AS blog_views,
+        b.appreciation  AS blog_appreciation,
+        b.create_time   AS blog_create_time,
+        b.update_time   AS blog_update_time
+    </sql>
+
+    <sql id="TypeColumns">
+        t.id        AS type_id,
+        t.name      AS type_name,
+        t.pic_url   AS type_pic_url,
+        t.color     AS type_color
+    </sql>
+
+    <sql id="UserColumns">
+        u.id                AS user_id,
+        u.nickname          AS user_nickname,
+        u.username          AS user_username,
+        u.email             AS user_email,
+        u.avatar            AS user_avatar,
+        u.login_province    AS user_login_province,
+        u.login_city        AS user_login_city,
+        u.login_lat         AS user_login_lat,
+        u.login_lng         AS user_login_lng,
+        u.type              AS user_type,
+        u.create_time       AS user_create_time,
+        u.update_time       AS user_update_time,
+        u.last_login_time   AS user_last_login_time
+    </sql>
+
+    <select id="selectBlogListWithFilter" resultMap="BlogQueryMap">
+        SELECT
+        b.*,
+        <include refid="TypeColumns"/>,
+        <include refid="UserColumns"/>
+        FROM t_blog b
+        LEFT JOIN t_user u ON b.user_id = u.id
+        LEFT JOIN t_type t ON b.type_id = t.id
+        <where>
+            <!--        b.deleted = 0-->
+            <if test="req.keyword != null and req.keyword != ''">
+                AND (
+                b.title LIKE CONCAT('%', #{req.keyword}, '%')
+                OR u.username LIKE CONCAT('%', #{req.keyword}, '%')
+                OR b.content LIKE CONCAT('%', #{req.keyword}, '%')
+                )
+            </if>
+            <if test="req.typeId != null">
+                AND b.type_id = #{req.typeId}
+            </if>
+            <if test="req.tagIds != null and req.tagIds.size() > 0">
+                AND EXISTS (
+                SELECT 1 FROM t_blog_tags bt
+                WHERE bt.blogs_id = b.id
+                AND bt.tags_id IN
+                <foreach collection="req.tagIds" item="tagId" open="(" separator="," close=")">
+                    #{tagId}
+                </foreach>
+                )
+            </if>
+        </where>
+<!--        ORDER BY b.created_at DESC-->
+    </select>
+
+    <select id="selectTagsByBlogIds" resultType="com.twilightchime.blog.model.dto.BlogTagDTO">
+        SELECT
+        bt.blogs_id AS blogId,
+        bt.tags_id  AS id,
+        t.name      AS name
+        FROM t_blog_tags bt
+        INNER JOIN t_tag t ON t.id = bt.tags_id
+        WHERE bt.blogs_id IN
+        <foreach collection="blogIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

@@ -53,14 +53,14 @@ public class ImageServiceImpl implements ImageService {
         Long height = (long) bufferedImage.getHeight();
 
         Image image = new Image();
-        image.setFile_path(uniqueFileName);
+        image.setPath(uniqueFileName);
         image.setName(StringUtils.hasText(uniqueFileName) ? uniqueFileName : originalFilename);
-        image.setOriginal_filename(originalFilename);
-        image.setFile_size(file.getSize());
+        image.setOriginalName(originalFilename);
+        image.setSize(file.getSize());
         image.setWidth(width);
         image.setHeight(height);
         imageRepository.save(image);
-        return image.getFile_path();
+        return image.getPath();
     }
 
     private boolean isAllowedFileType(String contentType) {

@@ -1,0 +1,2 @@
+ALTER TABLE t_user
+    MODIFY COLUMN type varchar(1) NOT NULL DEFAULT '0';

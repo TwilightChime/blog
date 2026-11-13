@@ -1,18 +1,19 @@
-package com.twilightchime.blog.mapper.request;
+package com.twilightchime.blog.convert.request;
 
-import com.twilightchime.blog.model.dto.tag.request.TagRequestDTO;
-import com.twilightchime.blog.entity.Tag;
+import com.twilightchime.blog.model.dto.user.request.UserPwdDTO;
+import com.twilightchime.blog.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface TagRequestMapper {
+public interface UserPwdConvert {
     @Mapping(target = "blogs", ignore = true)
-    Tag toEntity(TagRequestDTO dto);
+    User toEntity(UserPwdDTO dto);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createTime", ignore = true)
     @Mapping(target = "blogs", ignore = true)
-    void updateEntity(TagRequestDTO dto, @MappingTarget Tag entity);
+    void updateEntity(UserPwdDTO dto, @MappingTarget User entity);
 }

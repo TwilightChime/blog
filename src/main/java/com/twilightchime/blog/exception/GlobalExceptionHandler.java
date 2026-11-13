@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,6 +53,12 @@ public class GlobalExceptionHandler {
         e.getFieldErrors().forEach((fieldError) -> {fieldErrors.put(fieldError.getField(), fieldError.getDefaultMessage());});
         log.warn("[参数校验失败] 绑定错误: {}", fieldErrors);
         return Result.error(ErrorCode.PARAM_VALIDATION_FAILED, "VALIDATION_FAILED", fieldErrors);
+    }
+
+    @ExceptionHandler(SerializationException.class)
+    public void handleCacheSerialization(SerializationException e) {
+        log.warn("Redis 缓存序列化失败，已忽略: {}", e.getMessage());
+        // 不抛异常，让主流程继续
     }
 
     @ExceptionHandler(Exception.class)

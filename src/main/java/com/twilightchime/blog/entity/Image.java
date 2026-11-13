@@ -5,11 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "image")
+@Table(name = "t_image")
 @Data
 @Builder
 @NoArgsConstructor
@@ -22,11 +23,21 @@ public class Image {
             allocationSize = 1)
     private Long id;
     private String name;
-    private String file_path;
-    private String thumbnail_path;
-    private String original_filename;
-    private Long file_size;
-    private LocalDateTime upload_time;
+
+    @Column(name = "file_path")
+    private String path;
+
+    @Column(name = "thumbnail_path")
+    private String thumbnail;
+
+    @Column(name = "original_filename")
+    private String originalName;
+
+    @Column(name = "file_size")
+    private Long size;
+
+    @Column(name = "upload_time")
+    private LocalDateTime uploadTime;
     private Long width;
     private Long height;
 }
