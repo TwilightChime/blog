@@ -28,6 +28,8 @@ public interface TagService {
 
     Set<Tag> findOrCreateByNames(Set<String> nameList);
 
+    boolean existsByName(String name);
+
     long countByName(String name);
 
 //    TagDetailVO postTag(TagRequestDTO tagRequestDTO);

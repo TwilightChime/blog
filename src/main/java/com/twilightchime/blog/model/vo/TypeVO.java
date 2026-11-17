@@ -6,12 +6,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TypeDetailVO {
+public class TypeVO {
     private Long id;
     private String name;
     private String pic_url;
     private String color;
-
-    private List<BlogBaseDTO> blogs;
-
 }

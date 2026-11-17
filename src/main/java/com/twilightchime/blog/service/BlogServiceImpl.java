@@ -7,7 +7,6 @@ import com.twilightchime.blog.convert.vo.BlogDetailConvert;
 import com.twilightchime.blog.entity.Tag;
 import com.twilightchime.blog.entity.Type;
 import com.twilightchime.blog.mapper.BlogQueryMapper;
-import com.twilightchime.blog.model.common.PageRequest;
 import com.twilightchime.blog.model.common.PageResult;
 import com.twilightchime.blog.dao.BlogRepository;
 import com.twilightchime.blog.model.dto.BlogTagDTO;
@@ -24,8 +23,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,15 +46,15 @@ public class BlogServiceImpl implements BlogService {
     private final BlogCreateConvert blogCreateConvert;
     private final BlogUpdateConvert blogUpdateConvert;
 
-    @Transactional(readOnly = true)
-    @Override
-//    @Cacheable(value = "blog:list")
-    public PageResult<BlogDetailVO> getBlogByPage(PageRequest pageRequest) {
-        log.info("查询博客数据分页列表: num={}, size={}", pageRequest.getPageNumber(), pageRequest.getPageSize());
-        Pageable pageable = pageRequest.getPageable();
-        Page<Blog> blogPage = blogRepository.findAll(pageable);
-        return blogDetailConvert.toPageResult(blogPage);
-    }
+//    @Transactional(readOnly = true)
+//    @Override
+////    @Cacheable(value = "blog:list")
+//    public PageResult<BlogDetailVO> getBlogByPage(PageRequest pageRequest) {
+//        log.info("查询博客数据分页列表: num={}, size={}", pageRequest.getPageNumber(), pageRequest.getPageSize());
+//        Pageable pageable = pageRequest.getPageable();
+//        Page<Blog> blogPage = blogRepository.findAll(pageable);
+//        return PageAdapter.from(blogPage.map(blogDetailConvert::toDetailVO));
+//    }
 
     @Transactional(readOnly = true)
     @Override
@@ -122,25 +119,16 @@ public class BlogServiceImpl implements BlogService {
 
         Blog blog = blogCreateConvert.toEntity(blogCreateRequest);
         if (typeId != null) {
-            Type type = typeService.getByIdOrThrow(typeId);
+            Type type = typeService.findOrThrowById(typeId);
             blog.setType(type);
         }
         if (tagNameList != null && !tagNameList.isEmpty()) {
             Set<Tag> tags = tagService.findOrCreateByNames(tagNameList);
             blog.setTags(tags);
         }
-        blog.setUser(userService.getUserOrThrow(userId));
+        blog.setUser(userService.findOrThrowById(userId));
 
         return blogDetailConvert.toDetailVO(blogRepository.save(blog));
-
-//        if (blogCreateRequest.getId() == null) {
-//            Blog blog = blogRequestConvert.toEntity(blogCreateRequest);
-//            return blogDetailConvert.toDetailVO(blogRepository.save(blog));
-//        } else {
-//            log.warn("创建博客失败, id不为null: blogId={}", blogCreateRequest.getId());
-//            throw new BusinessException("博客id有值, 无法创建博客");
-//        }
-
     }
 
     @Override
@@ -155,7 +143,7 @@ public class BlogServiceImpl implements BlogService {
         blogUpdateConvert.mergeToEntity(blogUpdateRequest, blog);
 
         if (typeId != null) {
-            blog.setType(typeService.getByIdOrThrow(typeId));
+            blog.setType(typeService.findOrThrowById(typeId));
         }
 
         if (tagNameList != null && !tagNameList.isEmpty()) {

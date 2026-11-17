@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/images")
+@RequestMapping("/api/admin/images")
 public class ImageAdminController {
     private final ImageService imageService;
 

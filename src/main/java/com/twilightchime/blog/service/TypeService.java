@@ -1,24 +1,29 @@
 package com.twilightchime.blog.service;
 
 import com.twilightchime.blog.entity.Type;
-import com.twilightchime.blog.model.common.PageRequest;
 import com.twilightchime.blog.model.common.PageResult;
-import com.twilightchime.blog.model.dto.type.request.TypeRequestDTO;
-import com.twilightchime.blog.model.vo.TypeDetailVO;
-import org.springframework.transaction.annotation.Transactional;
+import com.twilightchime.blog.model.dto.type.request.TypeCreateRequest;
+import com.twilightchime.blog.model.dto.type.request.TypePageRequest;
+import com.twilightchime.blog.model.dto.type.request.TypeUpdateRequest;
+import com.twilightchime.blog.model.vo.TypeVO;
 
 import java.util.List;
 
 public interface TypeService {
 
-    PageResult<TypeDetailVO> getTypeByPage(PageRequest pageRequest);
+    PageResult<TypeVO> getTypeByPage(TypePageRequest typePageRequest);
 
-    @Transactional()
-    List<TypeDetailVO> getFullTypeList();
+    List<TypeVO> getFullTypeList();
 
-    TypeDetailVO postType(TypeRequestDTO typeRequestDTO);
+    TypeVO createType(TypeCreateRequest typeCreateRequest);
+
+    TypeVO updateType(TypeUpdateRequest typeUpdateRequest);
 
     void deleteType(Long id);
 
-    Type getByIdOrThrow(Long id);
+    Type findOrThrowById(Long id);
+
+    boolean existsByName(String name);
+
+//    TypeDetailVO postType(TypeRequestDTO typeRequestDTO);
 }

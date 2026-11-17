@@ -81,6 +81,7 @@ public class TagServiceImpl implements TagService {
         return nameList.stream().map(this::findOrCreateByName).collect(Collectors.toSet());
     }
 
+    @Override
     public boolean existsByName(String name) {
         return tagRepository.existsByName(name);
     }

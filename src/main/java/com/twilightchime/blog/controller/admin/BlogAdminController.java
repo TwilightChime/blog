@@ -26,7 +26,7 @@ public class BlogAdminController {
     private final BlogService blogService;
 
     @GetMapping("/blogs")
-    public Result<PageResult<BlogVO>> getBlogPage(BlogPageRequest blogPageRequest) {
+    public Result<PageResult<BlogVO>> getBlogPage(@Valid BlogPageRequest blogPageRequest) {
         log.info("获取博客分页列表请求: num={}, size={}, keyword={}, typeId={}, tagId={}", blogPageRequest.getPageNumber(),
                 blogPageRequest.getPageSize(), blogPageRequest.getKeyword(), blogPageRequest.getTypeId(), blogPageRequest.getTagIds());
 

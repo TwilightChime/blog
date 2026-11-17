@@ -1,33 +1,37 @@
 package com.twilightchime.blog.service;
 
 import com.twilightchime.blog.entity.User;
-import com.twilightchime.blog.model.common.PageRequest;
 import com.twilightchime.blog.model.common.PageResult;
-import com.twilightchime.blog.model.dto.user.request.UserPwdDTO;
-import com.twilightchime.blog.model.dto.user.request.UserRequestDTO;
+import com.twilightchime.blog.model.dto.user.request.*;
 import com.twilightchime.blog.model.vo.UserDetailVO;
-import com.twilightchime.blog.model.vo.UserLoginVO;
+import com.twilightchime.blog.model.vo.UserTokenVO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface UserService {
-    UserLoginVO createUser(UserPwdDTO userPwdDto);
+    UserTokenVO register(UserRegisterRequest userRegisterRequest);
 
-    UserLoginVO login(UserPwdDTO userPwdDto);
+    UserTokenVO login(UserLoginRequest userLoginRequest);
+
+//    UserLoginVO createUser(UserPwdDTO userPwdDto);
+
+    PageResult<UserDetailVO> getUserByPage(UserPageRequest userPageRequest);
+
+    @Transactional(readOnly = true)
+    List<UserDetailVO> getAllUser();
+
+    UserDetailVO updateUser(UserUpdateRequest userUpdateRequest);
+
+    void deleteUser(Long id);
 
     UserDetailVO getUser(String username);
 
     UserDetailVO getUser(Long id);
 
-    PageResult<UserDetailVO> getUserByPage(PageRequest pageRequest);
+    User findOrThrowById(Long id);
 
-    @Transactional(readOnly = true)
-    List<UserDetailVO> getAllUser();
+    boolean existsByUsername(String username);
 
-    UserDetailVO saveUser(UserRequestDTO userRequestDto);
-
-    void deleteUser(Long id);
-
-    User getUserOrThrow(Long id);
+    User findOrThrowByUsername(String username);
 }

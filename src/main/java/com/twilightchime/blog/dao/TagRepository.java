@@ -14,10 +14,10 @@ import java.util.Optional;
 public interface TagRepository extends JpaRepository<Tag, Long> {
     Optional<Tag> findByName(String name);
 
-    @Query("Select t From Tag t Where t.name Like %:name%")
+    @Query("Select t From Tag t Where (:name is null or :name = '' or t.name Like %:name%)")
     Page<Tag> findPageByNameLike(String name, Pageable pageable);
 
-    @Query(value = "Select t.* from t_tag t where t.name like %:name% limit :limit", nativeQuery = true)
+    @Query(value = "Select t.* from t_tag t where (:name is null or :name = '' or t.name like %:name%) limit :limit", nativeQuery = true)
     List<Tag> findListByNameLike(String name, int limit);
 
     boolean existsByName(String name);

@@ -3,8 +3,9 @@ package com.twilightchime.blog.controller.admin;
 import com.twilightchime.blog.model.common.PageRequest;
 import com.twilightchime.blog.model.common.PageResult;
 import com.twilightchime.blog.model.common.Result;
-import com.twilightchime.blog.model.dto.user.request.UserRequestDTO;
 import com.twilightchime.blog.exception.BusinessException;
+import com.twilightchime.blog.model.dto.user.request.UserPageRequest;
+import com.twilightchime.blog.model.dto.user.request.UserUpdateRequest;
 import com.twilightchime.blog.service.UserService;
 import com.twilightchime.blog.model.vo.UserDetailVO;
 import jakarta.validation.Valid;
@@ -17,7 +18,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class UserAdminController {
     private final UserService userService;
 //    @PostMapping("/setAvatar")
@@ -46,15 +47,15 @@ public class UserAdminController {
 //        return Result.ok("获取用户分页信息", result);
 //    }
 
-    @PostMapping("/user/getUserPage")
-    public Result<PageResult<UserDetailVO>> getUserPage(@Valid @RequestBody PageRequest pageRequest) {
-        log.info("获取用户分页列表请求: num={}, size={}", pageRequest.getPageNumber(), pageRequest.getPageSize());
-        PageResult<UserDetailVO> result = userService.getUserByPage(pageRequest);
-        log.info("获取用户分页列表成功: num={}, size={}", pageRequest.getPageNumber(), pageRequest.getPageSize());
+    @GetMapping("/users")
+    public Result<PageResult<UserDetailVO>> getUserPage(@Valid UserPageRequest userPageRequest) {
+        log.info("获取用户分页列表请求: num={}, size={}", userPageRequest.getPageNumber(), userPageRequest.getPageSize());
+        PageResult<UserDetailVO> result = userService.getUserByPage(userPageRequest);
+        log.info("获取用户分页列表成功: num={}, size={}", userPageRequest.getPageNumber(), userPageRequest.getPageSize());
         return Result.ok("获取用户分页信息", result);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/userList")
     public Result<List<UserDetailVO>> getAllUser() {
         return Result.ok("blogList", userService.getAllUser());
     }
@@ -70,17 +71,17 @@ public class UserAdminController {
 //    }
 
     @PostMapping("/user/update")
-    public Result<UserDetailVO> updateUser(@Valid @RequestBody UserRequestDTO userRequestDto) {
-        log.info("修改用户信息请求: userId={}, username={}", userRequestDto.getId(), userRequestDto.getUsername());
-        if (userRequestDto.getId() == null) {
+    public Result<UserDetailVO> updateUser(@Valid @RequestBody UserUpdateRequest userUpdateRequest) {
+        log.info("修改用户信息请求: userId={}, username={}", userUpdateRequest.getId(), userUpdateRequest.getUsername());
+        if (userUpdateRequest.getId() == null) {
             throw new BusinessException("更新用户id不能为空");
         }
-        UserDetailVO userDetailVO = userService.saveUser(userRequestDto);
-        log.info("修改用户信息成功: userId={}, username={}", userRequestDto.getId(), userRequestDto.getUsername());
+        UserDetailVO userDetailVO = userService.updateUser(userUpdateRequest);
+        log.info("修改用户信息成功: userId={}, username={}", userUpdateRequest.getId(), userUpdateRequest.getUsername());
         return Result.ok("修改用户信息成功", userDetailVO);
     }
 
-    @DeleteMapping("/users/{id}/delete")
+    @DeleteMapping("/user/delete/{id}")
     public Result<Void> deleteUser(@PathVariable Long id) {
         log.info("删除用户请求: userId={}", id);
         userService.deleteUser(id);

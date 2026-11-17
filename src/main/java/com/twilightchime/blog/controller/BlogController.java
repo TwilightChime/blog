@@ -1,7 +1,6 @@
 package com.twilightchime.blog.controller;
 
 import com.twilightchime.blog.aspect.RateLimit;
-import com.twilightchime.blog.model.common.PageRequest;
 import com.twilightchime.blog.model.common.PageResult;
 import com.twilightchime.blog.model.common.Result;
 import com.twilightchime.blog.model.dto.blog.request.BlogPageRequest;
@@ -10,7 +9,7 @@ import com.twilightchime.blog.service.BlogService;
 import com.twilightchime.blog.model.vo.BlogDetailVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Max;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,7 @@ public class BlogController {
     @Operation(summary = "获取博客列表", description = "支持分页查询")
     @RateLimit(key = "blog:list", count = 30, time = 60)
     @GetMapping("/blogs")
-    public Result<PageResult<BlogVO>> getBlogPage(BlogPageRequest blogPageRequest) {
+    public Result<PageResult<BlogVO>> getBlogPage(@Valid BlogPageRequest blogPageRequest) {
         log.info("获取博客分页列表请求: num={}, size={}", blogPageRequest.getPageNumber(), blogPageRequest.getPageSize());
         PageResult<BlogVO> result = blogService.getBlogByPage(blogPageRequest);
         log.info("获取博客分页列表成功: num={}, size={}", blogPageRequest.getPageNumber(), blogPageRequest.getPageSize());

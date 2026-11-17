@@ -13,7 +13,7 @@ import java.util.Set;
 
 public interface BlogService {
 
-    PageResult<BlogDetailVO> getBlogByPage(PageRequest pageRequest);
+//    PageResult<BlogDetailVO> getBlogByPage(PageRequest pageRequest);
 
     PageResult<BlogVO> getBlogByPage(BlogPageRequest blogPageRequest);
 

@@ -5,6 +5,7 @@ import com.twilightchime.blog.model.common.Result;
 import com.twilightchime.blog.model.dto.tag.request.TagPageRequest;
 import com.twilightchime.blog.model.vo.TagVO;
 import com.twilightchime.blog.service.TagService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class TagController {
     private final TagService tagService;
 
     @GetMapping("/tags")
-    public Result<PageResult<TagVO>> getTagPage(TagPageRequest tagPageRequest) {
+    public Result<PageResult<TagVO>> getTagPage(@Valid TagPageRequest tagPageRequest) {
         log.info("获取标签分页列表请求: num={}, size={}", tagPageRequest.getPageNumber(), tagPageRequest.getPageSize());
         PageResult<TagVO> pageResult = tagService.getTagByPage(tagPageRequest);
         log.info("获取标签分页列表成功: num={}, size={}", tagPageRequest.getPageNumber(), tagPageRequest.getPageSize());

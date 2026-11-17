@@ -41,13 +41,6 @@
             <result property="updateTime" column="update_time"/>
             <result property="lastLoginTime" column="last_login_time"/>
         </association>
-
-        <!-- 多对多：标签（一个博客多行标签，靠 id 去重合并） -->
-<!--        <collection property="tags" ofType="com.twilightchime.blog.model.vo.TagDetailVO"-->
-<!--                    columnPrefix="tag_">-->
-<!--            <id property="id" column="id"/>-->
-<!--            <result property="name" column="name"/>-->
-<!--        </collection>-->
     </resultMap>
 
     <sql id="BlogColumns">

@@ -1,23 +1,11 @@
 package com.twilightchime.blog.model.dto.user.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserPwdDTO {
-    @Min(value = 1, message = "用户id不能小于1")
-    private Long id;
+public class UserRegisterRequest {
     private String nickname;
 
     @NotBlank(message = "用户名不为空")
@@ -36,9 +24,4 @@ public class UserPwdDTO {
     private String loginCity;
     private String loginLat;
     private String loginLng;
-    private String type;
-    @JsonIgnore
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
-    private LocalDateTime lastLoginTime;
 }
